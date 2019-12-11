@@ -3,6 +3,7 @@
         cljsjs/leaflet {:mvn/version "1.5.1-0"}
         cljsjs/react-virtualized {:mvn/version "9.21.1-0"}
         cljsjs/vega {:mvn/version "5.4.0-0"}
+        com.opengb/dram {:git/url "https://github.com/opengb/dram.git" :sha "391dc3201bfb1963ff3437fdebf8b1a73a3c3817"}
         com.taoensso/timbre {:mvn/version "4.10.0"}
         markdown-to-hiccup {:mvn/version "0.6.2"}
         org.clojure/clojure {:mvn/version "1.10.1"}
