@@ -14,8 +14,7 @@
     :ext "png"}
 
    :esri-world-gray-canvas
-   {
-    :url "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+   {:url "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
     ; :url "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
     :attribution "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
     :maxZoom 16}})
@@ -38,26 +37,22 @@
     (reagent/create-class
      {:component-did-mount
       (fn map-did-mount [c]
-        (let [{:keys [
-                      initial-lat-lng
+        (let [{:keys [initial-lat-lng
                       initial-max-bounds
                       initial-zoom
                       max-zoom
                       min-zoom
                       show-draw-control
                       show-zoom-control
-                      z-index
-                      ]
-               :or {
-                    initial-lat-lng [0 0]
+                      z-index]
+               :or {initial-lat-lng [0 0]
                     initial-max-bounds [[49 -65] [24 -127]]
                     initial-zoom 10
                     max-zoom 17
                     min-zoom 0
                     show-draw-control false
                     show-zoom-control true
-                    z-index 1
-                    }} (reagent/props c)
+                    z-index 1}} (reagent/props c)
               min-zoom (min min-zoom initial-zoom)
               max-zoom (max max-zoom initial-zoom)
               map-node
@@ -88,8 +83,8 @@
           (.setView leaflet-map
                     current-view
                     current-zoom
-                    #js {:reset did-resize?} ;; prevent pan animations on a resize
-                    )
+                    ;; prevent pan animations on a resize
+                    #js {:reset did-resize?})
 
           ;; blow away old markers
           (->> @*marker-layers
@@ -103,17 +98,17 @@
           ;; create all new markers from data
           (->> markers
                (map (fn create-marker
-                 [{:keys [id lat-lng marker-attributes tooltip]
-                   :or {marker-attributes {:stroke true :color "magenta"}}}]
-                 (let [marker-obj
-                       ^js/Leaflet.CircleMarker
-                       (.circleMarker ^js/Leaflet leaflet
-                                      (clj->js lat-lng)
-                                      (clj->js marker-attributes))]
-                   (.bindTooltip marker-obj tooltip #js {:direction "top"})
-                   (.on marker-obj "click" #(on-marker-click id))
-                   (swap! *marker-layers conj marker-obj)
-                   (.addTo marker-obj leaflet-map))))
+                      [{:keys [id lat-lng marker-attributes tooltip]
+                        :or {marker-attributes {:stroke true :color "magenta"}}}]
+                      (let [marker-obj
+                            ^js/Leaflet.CircleMarker
+                            (.circleMarker ^js/Leaflet leaflet
+                                           (clj->js lat-lng)
+                                           (clj->js marker-attributes))]
+                        (.bindTooltip marker-obj tooltip #js {:direction "top"})
+                        (.on marker-obj "click" #(on-marker-click id))
+                        (swap! *marker-layers conj marker-obj)
+                        (.addTo marker-obj leaflet-map))))
                (doall))))
 
       :reagent-render

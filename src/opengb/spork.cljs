@@ -1,10 +1,10 @@
 (ns opengb.spork
   (:require
    [markdown-to-hiccup.core :as md]
-   [opengb.spork.quantity :as qty]
    [opengb.spork.design-note :as design-note]
    [opengb.spork.keyboard-listener :as kb]
    [opengb.spork.leaflet :as leaflet]
+   [opengb.spork.quantity :as qty]
    [opengb.spork.vega :as vega]
    [opengb.spork.virtualized :as virtualized]))
 
