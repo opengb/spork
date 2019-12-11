@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/clojure:tools-deps-node-browsers
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "deps.edn" }}
+            - v1-dependencies-
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y build-essential
+      - run: make unit
+      - save_cache:
+          key: v1-dependencies-{{ checksum "deps.edn" }}
+          paths:
+            - ~/.m2
