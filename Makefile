@@ -6,11 +6,14 @@ unit: node_modules
 build:
 	clj --main cljs.main --compile-opts prd.cljs.edn --compile opengb.spork
 
+nrepl:
+	clj -A:dev:test:nrepl
+
 clean:
-	rm -rf out
+	rm -rf out target
 
 node_modules: package.json
 	npm install
 	@touch node_modules
 
-.PHONY: unit build clean
+.PHONY: unit build nrepl clean
