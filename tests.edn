@@ -1,0 +1,9 @@
+#kaocha/v1
+{:tests [{:id :cljs/unit
+          :type :kaocha.type/cljs
+          :source-paths ["src"]
+          :test-paths ["test"]
+          :cljs/timeout 20000
+          :cljs/repl-env cljs.repl.browser/repl-env
+          :cljs/compiler-options {}}]
+ :plugins [:kaocha.plugin/notifier]}

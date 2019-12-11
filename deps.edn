@@ -8,4 +8,7 @@
         org.clojure/clojurescript {:mvn/version "1.10.597"}
         re-frame {:mvn/version "0.10.9"}
         reagent {:mvn/version "0.8.1"}
-        stylefy {:mvn/version "1.14.0"}}}
+        stylefy {:mvn/version "1.14.0"}}
+ :aliases {:test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}
+                               lambdaisland/kaocha-cljs {:mvn/version "0.0-59"}}
+                  :extra-paths ["test"]}}}
