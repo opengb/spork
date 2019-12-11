@@ -1,0 +1,6 @@
+{:closure-defines {goog.DEBUG false}
+ :optimizations :advanced
+ :infer-externs true
+ :npm-deps false
+ :output-dir "target/public/cljs-out/prd"
+ :verbose true}

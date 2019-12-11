@@ -10,5 +10,6 @@
 /classes/
 /lib/
 /target/
+out
 pom.xml
 pom.xml.asc
