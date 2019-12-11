@@ -3,7 +3,5 @@
           :type :kaocha.type/cljs
           :source-paths ["src"]
           :test-paths ["test"]
-          :cljs/timeout 60000
-          :cljs/repl-env cljs.repl.browser/repl-env
           :cljs/compiler-options {}}]
  :plugins [:kaocha.plugin/notifier]}

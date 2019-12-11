@@ -1,6 +1,6 @@
 all: unit
 
-unit:
+unit: node_modules
 	bin/kaocha
 
 build:
@@ -8,5 +8,9 @@ build:
 
 clean:
 	rm -rf out
+
+node_modules: package.json
+	npm install
+	@touch node_modules
 
 .PHONY: unit build clean
