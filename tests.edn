@@ -1,0 +1,7 @@
+#kaocha/v1
+{:tests [{:id :cljs/unit
+          :type :kaocha.type/cljs
+          :source-paths ["src"]
+          :test-paths ["test"]
+          :cljs/compiler-options {}}]
+ :plugins [:kaocha.plugin/notifier]}
