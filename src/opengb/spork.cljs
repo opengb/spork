@@ -1,5 +1,6 @@
 (ns opengb.spork
   (:require
+   [markdown-to-hiccup.core :as md]
    [opengb.spork.quantity :as qty]
    [opengb.spork.design-note :as design-note]
    [opengb.spork.keyboard-listener :as kb]
@@ -36,3 +37,11 @@
    Provides this re-frame subscription:
    `[:opengb.spork.design-note/showing?]`"
   design-note/register)
+
+(defn Markdown
+  "Renders a markdown string.
+
+   Example: `[Markdown \"* a markdown string *\"]` will be rendered by this
+   component into something like `[:strong \"a markdown string\"]`."
+  [s]
+  (md/component (md/md->hiccup s)))

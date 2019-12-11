@@ -4,6 +4,7 @@
         cljsjs/react-virtualized {:mvn/version "9.21.1-0"}
         cljsjs/vega {:mvn/version "5.4.0-0"}
         com.taoensso/timbre {:mvn/version "4.10.0"}
+        markdown-to-hiccup {:mvn/version "0.6.2"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.597"}
         re-frame {:mvn/version "0.10.9"}
