@@ -19,7 +19,7 @@
 
 (defn KeyboardListener
   ""
-  [props children]
+  [_props _children]
   (let [handler (atom nil)]
     (reagent/create-class
      {:component-did-mount
@@ -32,9 +32,9 @@
         (js/window.addEventListener "keydown" @handler))
       :component-will-unmount
       (fn layout-ui-component-will-unmount
-        [component]
+        [_component]
         (timbre/debug "removing debug handler")
         (js/window.removeEventListener "keydown" @handler))
       :reagent-render
-      (fn [props children]
+      (fn [_props children]
         [:div.keyboard-shortcuts children])})))

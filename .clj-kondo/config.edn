@@ -1,2 +1,3 @@
 {:linters {:unresolved-symbol {:exclude [(devcards.core/defcard)
-                                         (devcards.core/defcard-rg)]}}}
+                                         (devcards.core/defcard-rg)]}
+           :unused-namespace {:exclude [taoensso.timbre]}}}

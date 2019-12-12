@@ -5,8 +5,7 @@
    [reagent.core :as reagent]
    [stylefy.core :refer [use-style]])
   (:import (goog.i18n NumberFormat)
-           (goog.i18n.NumberFormat Format)
-           [goog.async Throttle]))
+           (goog.i18n.NumberFormat Format)))
 
 ; https://gist.github.com/zentrope/181d591b52dcf3f5d336bc15131a1116
 (def number-format (NumberFormat. Format/DECIMAL))

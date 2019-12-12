@@ -51,7 +51,7 @@
 
 (defn Chart
   "Renderer for a generic Vega chart"
-  [props]
+  [_props]
   (let [*a-ref (atom nil)
         *vega-view (atom nil)]
     (reagent/create-class
@@ -60,8 +60,6 @@
       :reagent-render
       (fn [{:keys [width height]}]
         [:div {:ref #(reset! *a-ref %)
-               #_#_:style {:outline "1px dotted red"
-                           :position "relative !important"}
                :width width
                :height height}])})))
 
@@ -99,10 +97,3 @@
      {:signals {:bin-step   bin-step
                 :bin-extent [min max]}
       :data    {:points (map #(hash-map :u %) sorted)}})))
-
-(comment
-
-  [:button {:on-click #(prn (.data (deref *vega-view) "costs")
-                            (.data (deref *vega-view) "benefits")
-                            (.data @*vega-view "lines"))}
-   "log data"])

@@ -1,8 +1,7 @@
 (ns opengb.spork.cards
   (:require
-   [devcards.core :refer [defcard defcard-rg]]
-   [opengb.spork :as spork]
-   [reagent.core :as r]))
+   [devcards.core :refer [defcard-rg]]
+   [opengb.spork :as spork]))
 
 (defcard-rg Map
   "A bare, no-arg map."
