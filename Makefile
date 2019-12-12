@@ -9,6 +9,9 @@ build:
 nrepl:
 	clj -A:dev:test:nrepl
 
+lint:
+	clj-kondo --lint dev src test
+
 clean:
 	rm -rf out target
 

@@ -1,0 +1,2 @@
+{:linters {:unresolved-symbol {:exclude [(devcards.core/defcard)
+                                         (devcards.core/defcard-rg)]}}}
