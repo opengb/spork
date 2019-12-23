@@ -6,7 +6,7 @@ unit: node_modules
 build:
 	clj --main cljs.main --compile-opts prd.cljs.edn --compile opengb.spork
 
-nrepl:
+repl:
 	clj -A:dev:test:nrepl
 
 lint:
