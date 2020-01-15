@@ -1,6 +1,10 @@
 (ns opengb.spork.leaflet-cards
   (:require
+   [clojure.pprint :as pp]
    [devcards.core :refer [defcard-rg]]
+   [reagent.core :as reagent]
+   [re-frame.core :as re-frame :refer [dispatch subscribe]]
+   [opengb.spork.leaflet :as leaflet]
    [opengb.spork :as spork]))
 
 (defcard-rg Map
@@ -30,15 +34,37 @@
              {:id 2 :lat-lng [49.2830 -123.1235]}]}
   {:inspect-data true})
 
-(def *map-config (atom nil))
+(defn SubscribingSporkMap
+  []
+  (let [*config (subscribe [::leaflet/tile-config])]
+    (fn []
+      [:<>
+       [spork/Map {:tile-config @*config}]
+       [:hr]
+       [:div "received map configuration:" [:pre (with-out-str (pp/pprint @*config))]]])))
 
-(defcard-rg Re-FrameConfigMap
-  (fn [*props _]
+(defonce *config-state
+  (reagent/atom {:registered? false}))
+
+(defcard-rg ReFrameConfigMap
+  "A map demonstrating how to initialize the re-frame Leaflet events, and fetch and use
+   a remote map configuration."
+  (fn [_]
     [:<>
-     [spork/Map @*props]
-     [:pre (str @*map-config)]
-     [:button {:on-click #(prn "register")} "Register re-frame bits"]
-     [:button {:on-click #(prn "load")} "Load remote config"]
-     [:button {:on-click #(prn "clear")} "Clear remote config"]])
-  {:map-config *map-config}
-  {:inspect-data true})
+     (if (:registered? @*config-state)
+       [SubscribingSporkMap]
+       [:div {:style {:border "1px solid black"
+                      :box-sizing "border-box"
+                      :padding "3rem"
+                      :width 480
+                      :height 400}}
+        "Can't show map yet; re-frame not registered"])
+     [:button {:on-click #(do (leaflet/register-re-frame "/tile-config")
+                              (swap! *config-state assoc :registered? true))}
+      "Register config handlers with re-frame"]
+     [:button {:on-click #(dispatch [::leaflet/request-tile-config])
+               :disabled (not (:registered? @*config-state))}
+      "Request config"]
+     [:button {:on-click #(dispatch [::leaflet/clear-tile-config])
+               :disabled (not (:registered? @*config-state))}
+      "Clear config"]]))
