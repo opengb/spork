@@ -2,6 +2,7 @@
   (:require
    [markdown-to-hiccup.core :as md]
    [opengb.spork.design-note :as design-note]
+   [opengb.spork.error-boundary :as error-boundary]
    [opengb.spork.keyboard-listener :as kb]
    [opengb.spork.leaflet :as leaflet]
    [opengb.spork.quantity :as qty]
@@ -45,3 +46,5 @@
    component into something like `[:strong \"a markdown string\"]`."
   [s]
   (md/component (md/md->hiccup s)))
+
+(def ErrorBoundary error-boundary/ErrorBoundary)
