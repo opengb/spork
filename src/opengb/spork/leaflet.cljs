@@ -14,9 +14,9 @@
 
 ; (require '[clojure.data.json :as json])
 ; (require '[ring.util.response :as response])
-; (defn map-config-handler
+; (defn tile-config-handler
 ;   [_req]
-;   (-> valid-map-config
+;   (-> a-valid-tile-config ;; see specs
 ;       (json/write-str)
 ;       (response/response)
 ;       (response/content-type "application/json")))
@@ -28,7 +28,7 @@
   (timbre/debug "registering spork/Map at uri" uri)
 
   (re-frame/reg-event-fx
-   ::request-config
+   ::request-tile-config
    (fn [_ params]
      {:http-xhrio {:method           :post
                    :uri              uri
@@ -38,32 +38,31 @@
                    :format           (ajax/json-request-format)
                    :timeout          8000
                    :response-format  (ajax/json-response-format {:keywords? true})
-                   :on-success       [::receive-config]
-                   :on-failure       [::handle-config-error]}}))
+                   :on-success       [::receive-tile-config]
+                   :on-failure       [::handle-tile-config-error]}}))
 
   (re-frame/reg-event-fx
-   ::receive-config
+   ::receive-tile-config
    (fn [{:keys [db]} [_ leaflet-config]]
-     (if (s/valid? ::leaflet-specs/leaflet-map-config leaflet-config)
-       {:db (assoc db ::leaflet-config leaflet-config)}
-       {:dispatch [::handle-config-error
-                   (s/explain-str ::leaflet-specs/leaflet-map-config leaflet-config)]})))
+     (let [spec ::leaflet-specs/leaflet-tile-config]
+     (if (s/valid? spec leaflet-config)
+       {:db (assoc db ::tile-config leaflet-config)}
+       {:dispatch [::handle-config-error (s/explain-str spec leaflet-config)]}))))
 
   (re-frame/reg-event-fx
-   ::handle-config-error
+   ::handle-tile-config-error
    (fn [_ [_ response-data]]
-     (timbre/error ::handle-config-error response-data)))
+     (timbre/error ::handle-tile-config-error response-data)))
 
   (re-frame/reg-event-fx
-   ::clear-config
+   ::clear-tile-config
    (fn [{:keys [db]} _]
-     (timbre/debug ::clear-config "clearing config")
-     {:db (dissoc db ::leaflet-config)}))
+     {:db (dissoc db ::tile-config)}))
 
   (re-frame/reg-sub
-   ::config
+   ::tile-config
    (fn [db _]
-     (::leaflet-config db))))
+     (::tile-config db))))
 
 ;; *
 

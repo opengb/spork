@@ -5,10 +5,10 @@
    [opengb.spork.leaflet-specs :as leaflet-specs]
    [ring.util.response :as response]))
 
-(defn map-config-handler
+(defn tile-config-handler
   "Feeds out a valid map config for testing config loading in devcards."
   [_]
-  (-> leaflet-specs/sample-map-config
+  (-> leaflet-specs/sample-tile-config
       (json/write-str)
       (response/response)
       (response/content-type "application/json")))
@@ -16,5 +16,5 @@
 (defn handler
   [request]
   (if (= (:uri request) "/tile-config")
-    (map-config-handler request)
+    (tile-config-handler request)
     (figwheel.server.ring/not-found request)))

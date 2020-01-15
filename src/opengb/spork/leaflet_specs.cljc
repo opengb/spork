@@ -18,14 +18,14 @@
 (s/def ::base-tile-url         ::non-empty-string)
 (s/def ::center                ::point)
 
-(s/def ::leaflet-map-config
+(s/def ::leaflet-tile-config
   (s/keys :req-un [::base-tile-subdomains
                    ::base-tile-attribution
                    ::base-tile-url
                    ::center
                    ::zoom]))
 
-(def sample-map-config
+(def sample-tile-config
   {:base-tile-attribution "© Example Leaflet Provider (https://example.com/leaflet-provider/copyright/)"
    :base-tile-subdomains "abcd"
    :base-tile-url "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
@@ -33,10 +33,10 @@
    :zoom 16.0})
 
 (comment
- (s/valid? ::tile-url "http://foo.bar")
- (s/valid? ::tile-url "http://fa://aou//foo.bar")
- (s/valid? ::leaflet-map-config sample-map-config)
- (s/explain ::leaflet-map-config sample-map-config)
+ (s/valid? ::base-tile-url "http://foo.bar")
+ (s/valid? ::base-tile-url "http://fa://aou//foo.bar")
+ (s/valid? ::leaflet-tile-config sample-tile-config)
+ (s/explain ::leaflet-tile-config sample-tile-config)
  (s/exercise ::zoom)
  (s/generate ::leaflet-map-config)
 
