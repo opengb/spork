@@ -1,8 +1,71 @@
 (ns opengb.spork.leaflet
   (:require
+   [ajax.core :as ajax]
+   [clojure.spec.alpha :as s]
+   [day8.re-frame.http-fx]
    [leaflet]
+   [opengb.spork.leaflet-specs :as leaflet-specs]
    [reagent.core :as reagent]
+   [re-frame.core :as re-frame]
    [taoensso.timbre :as timbre]))
+
+;; sample map config provider / ring handler for clj side
+;; provide uri to this handler in `(register-re-frame uri)` on the cljs side
+
+; (require '[clojure.data.json :as json])
+; (require '[ring.util.response :as response])
+; (defn map-config-handler
+;   [_req]
+;   (-> valid-map-config
+;       (json/write-str)
+;       (response/response)
+;       (response/content-type "application/json")))
+
+;; * re-frame event/sub plumbing
+
+(defn register-re-frame
+  [uri]
+  (timbre/debug "registering spork/Map at uri" uri)
+
+  (re-frame/reg-event-fx
+   ::request-config
+   (fn [_ params]
+     {:http-xhrio {:method           :post
+                   :uri              uri
+                   :with-credentials true
+                   :headers          {}
+                   :params           (or params {})
+                   :format           (ajax/json-request-format)
+                   :timeout          8000
+                   :response-format  (ajax/json-response-format {:keywords? true})
+                   :on-success       [::receive-config]
+                   :on-failure       [::handle-config-error]}}))
+
+  (re-frame/reg-event-fx
+   ::receive-config
+   (fn [{:keys [db]} [_ leaflet-config]]
+     (if (s/valid? ::leaflet-specs/leaflet-map-config leaflet-config)
+       {:db (assoc db ::leaflet-config leaflet-config)}
+       {:dispatch [::handle-config-error
+                   (s/explain-str ::leaflet-specs/leaflet-map-config leaflet-config)]})))
+
+  (re-frame/reg-event-fx
+   ::handle-config-error
+   (fn [_ [_ response-data]]
+     (timbre/error ::handle-config-error response-data)))
+
+  (re-frame/reg-event-fx
+   ::clear-config
+   (fn [{:keys [db]} _]
+     (timbre/debug ::clear-config "clearing config")
+     {:db (dissoc db ::leaflet-config)}))
+
+  (re-frame/reg-sub
+   ::config
+   (fn [db _]
+     (::leaflet-config db))))
+
+;; *
 
 (def map-styles
   {:toner-lite
