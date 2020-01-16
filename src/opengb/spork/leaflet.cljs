@@ -34,7 +34,8 @@
 
   (re-frame/reg-event-fx
    ::request-tile-config
-   (fn [_ params]
+   (fn [_ [event-k params]]
+     (timbre/debug event-k)
      {:http-xhrio {:method           :post
                    :uri              uri
                    :with-credentials true
@@ -48,16 +49,17 @@
 
   (re-frame/reg-event-fx
    ::receive-tile-config
-   (fn [{:keys [db]} [_ leaflet-config]]
+   (fn [{:keys [db]} [event-k leaflet-config]]
+     (timbre/debug event-k)
      (let [spec ::leaflet-specs/leaflet-tile-config]
-     (if (s/valid? spec leaflet-config)
-       {:db (assoc db ::tile-config leaflet-config)}
-       {:dispatch [::handle-tile-config-error (s/explain-str spec leaflet-config)]}))))
+       (if (s/valid? spec leaflet-config)
+         {:db (assoc db ::tile-config leaflet-config)}
+         {:dispatch [::handle-tile-config-error (s/explain-str spec leaflet-config)]}))))
 
   (re-frame/reg-event-fx
    ::handle-tile-config-error
-   (fn [_ [_ response-data]]
-     (timbre/error ::handle-tile-config-error response-data)))
+   (fn [_ [event-k response-data]]
+     (timbre/error event-k response-data)))
 
   (re-frame/reg-event-fx
    ::clear-tile-config
