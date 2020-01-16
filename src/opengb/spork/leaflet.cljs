@@ -102,6 +102,54 @@
 
 ;; * Reagent component
 
+(defn find-marker-bounds
+  "Finds bounding box of given markers, and returns map containing center point
+   and zoom level required to fit bounds on given map."
+  [leaflet-map markers]
+  (let [lat-lngs (map :lat-lng markers)
+        lats     (map first lat-lngs)
+        lngs     (map second lat-lngs)
+        north    (apply max lngs)
+        east     (apply max lats)
+        south    (apply min lngs)
+        west     (apply min lats)
+        bounds   [[east north] [west south]]
+        zoom     (.getBoundsZoom leaflet-map (clj->js bounds))
+        mid      (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
+        center   [(mid lats) (mid lngs)]]
+    {:initial-lat-lng center :initial-zoom zoom}))
+
+(defn draw-markers
+  [leaflet-map *marker-layers new-markers on-marker-click]
+
+  ;; blow away old markers
+  (->> @*marker-layers
+       (map (fn destroy-marker
+              [^js/Leaflet.CircleMarker marker-obj]
+              (.removeLayer leaflet-map marker-obj))
+            @*marker-layers)
+       (doall))
+  (reset! *marker-layers [])
+
+  ;; create all new markers from data
+  (->> new-markers
+       (map (fn create-marker
+              [{:keys [id lat-lng marker-attributes tooltip]
+                :or {marker-attributes {:stroke true :color "magenta"}}
+                :as marker-data}]
+              (let [marker-obj
+                    ^js/Leaflet.CircleMarker
+                    (.circleMarker ^js/Leaflet leaflet
+                                   (clj->js lat-lng)
+                                   (clj->js marker-attributes))]
+                (when tooltip
+                  (.bindTooltip marker-obj tooltip #js {:direction "top"}))
+                (when on-marker-click
+                  (.on marker-obj "click" #(on-marker-click marker-data)))
+                (swap! *marker-layers conj marker-obj)
+                (.addTo marker-obj leaflet-map))))
+       (doall)))
+
 (defn Map
   "Wrap leaflet map"
   [_props]
@@ -120,6 +168,9 @@
                       show-zoom-control
                       z-index
                       use-default-tiles?
+                      fit-to-markers?
+                      markers
+                      on-marker-click
                       tile-config]
                :or   {initial-lat-lng    [0 0]
                       initial-zoom       10
@@ -128,6 +179,8 @@
                       show-draw-control  false
                       show-zoom-control  true
                       use-default-tiles? false
+                      fit-to-markers?    false
+                      markers            []
                       z-index            1}
                :as _props} (reagent/props c)
               min-zoom (min min-zoom initial-zoom)
@@ -142,9 +195,19 @@
                                                   :minZoom         min-zoom
                                                   :maxZoom         max-zoom})))
 
-          (assert ::leaflet-specs/point initial-lat-lng)
-          (assert ::leaflet-specs/zoom  initial-zoom)
-          (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom)
+          ;; set initial zoom / centre on mount only, so we don't blow
+          ;; away the user's position on new data
+          (if (and fit-to-markers? (not-empty markers))
+
+            ;; calc zoom and center
+            (let [{:keys [initial-lat-lng
+                          initial-zoom]} (find-marker-bounds @*leaflet-map markers)]
+              (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom))
+
+            ;; use supplied vals
+            (do (assert ::leaflet-specs/point initial-lat-lng)
+                (assert ::leaflet-specs/zoom  initial-zoom)
+                (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom)))
 
           ;; set up tile layer
           (cond
@@ -154,7 +217,9 @@
 
            (s/valid? ::leaflet-specs/leaflet-tile-config tile-config)
            (do (reset! *base-tile-layer (make-base-tile-layer tile-config))
-               (.addTo @*base-tile-layer @*leaflet-map)))))
+               (.addTo @*base-tile-layer @*leaflet-map)))
+
+          (draw-markers @*leaflet-map *marker-layers markers on-marker-click)))
 
       :component-did-update
       (fn map-did-update [c [_ & old-argv]]
@@ -181,30 +246,7 @@
                     ;; prevent pan animations on a resize
                     #js {:reset did-resize?})
 
-          ;; blow away old markers
-          (->> @*marker-layers
-               (map (fn destroy-marker
-                      [^js/Leaflet.CircleMarker marker-obj]
-                      (.removeLayer leaflet-map marker-obj))
-                    @*marker-layers)
-               (doall))
-          (reset! *marker-layers [])
-
-          ;; create all new markers from data
-          (->> markers
-               (map (fn create-marker
-                      [{:keys [id lat-lng marker-attributes tooltip]
-                        :or {marker-attributes {:stroke true :color "magenta"}}}]
-                      (let [marker-obj
-                            ^js/Leaflet.CircleMarker
-                            (.circleMarker ^js/Leaflet leaflet
-                                           (clj->js lat-lng)
-                                           (clj->js marker-attributes))]
-                        (.bindTooltip marker-obj tooltip #js {:direction "top"})
-                        (.on marker-obj "click" #(on-marker-click id))
-                        (swap! *marker-layers conj marker-obj)
-                        (.addTo marker-obj leaflet-map))))
-               (doall))))
+          (draw-markers @*leaflet-map *marker-layers markers on-marker-click)))
 
       :reagent-render
       (fn map-render [{:keys [width height]

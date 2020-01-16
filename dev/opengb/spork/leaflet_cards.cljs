@@ -25,14 +25,26 @@
   {:inspect-data true})
 
 (defcard-rg MapWithMarkers
-  "Can add markers to a map"
+  "Can add markers with default colouring to a map"
   (fn [*props _]
     [spork/Map @*props])
   {:initial-lat-lng [49.2827 -123.1207]
-   :initial-zoom 8
-   :marker-attributes {:stroke true :color "red"}
+   :initial-zoom 16
    :markers [{:id 1 :lat-lng [49.2827 -123.1207]}
              {:id 2 :lat-lng [49.2830 -123.1235]}]
+   :use-default-tiles? true}
+  {:inspect-data true})
+
+(defcard-rg AutoFittingToMarkers
+  "A map can auto-fit to its supplied markers *on mount only* with `fit-to-map?`"
+  (fn [*props _]
+    [spork/Map @*props])
+  {:fit-to-markers? true
+   :markers [{:id 1 :lat-lng [49.2827 -123.1207] :tooltip "Vancouver"
+              :marker-attributes {:stroke true :color "red"}}
+             {:id 2 :lat-lng [19.4326 -99.1332] :tooltip "Mexico City"
+              :marker-attributes {:stroke true :color "blue"}}]
+   :on-marker-click #(js/alert (str "marker click " %))
    :use-default-tiles? true}
   {:inspect-data true})
 
