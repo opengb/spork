@@ -1,3 +1,6 @@
+^{:ring-handler opengb.figwheel-handler/handler
+  :ring-server-options {:port 9700}
+  :watch-dirs ["src" "dev"]}
 {:closure-defines {"re_frame.trace.trace_enabled_QMARK_" true goog.DEBUG true}
  :devcards true ;; nb: `defcard` no-ops without this set
  :infer-externs true

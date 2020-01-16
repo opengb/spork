@@ -39,6 +39,20 @@
    `[:opengb.spork.design-note/showing?]`"
   design-note/register)
 
+(def init-map
+  "[uri]
+
+   Enables re-frame integration for pulling leaflet config from a supplied
+   endpoint.
+
+   Provides these re-frame events:
+
+   `[:opengb.spork.leaflet/request-config]`
+
+   Provides this re-frame subscription:
+   `[:opengb.spork.leaflet/config]`"
+  leaflet/register-re-frame)
+
 (defn Markdown
   "Renders a markdown string.
 
