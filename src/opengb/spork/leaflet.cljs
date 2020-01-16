@@ -12,14 +12,14 @@
    [taoensso.timbre :as timbre]))
 
 ;; sample map config provider / ring handler for clj side
-;; provide uri to this handler in `(register-re-frame uri)` on the cljs side
+;; provide uri to this handler in `(dispatch [::request-tile-config uri])`
 
 ; (require '[clojure.data.json :as json])
 ; (require '[clojure.spec.alpha :as s])
 ; (require '[ring.util.response :as response])
 ; (defn tile-config-handler
 ;   [req]
-;   (let [config (a-valid-tile-config (:body-params req))]
+;   (let [config (a-valid-tile-config (do-something-with-route-and-query-params req))]
 ;     (assert (s/valid? ::leaflet-specs/leaflet-tile-config config))
 ;     (-> config
 ;         (json/write-str)
@@ -29,19 +29,17 @@
 ;; * re-frame event/sub plumbing
 
 (defn register-re-frame
-  [uri]
-  (timbre/debug "registering spork/Map at uri" uri)
+  []
+  (timbre/debug "registering spork/Map")
 
   (re-frame/reg-event-fx
    ::request-tile-config
-   (fn [_ [event-k params]]
-     (timbre/debug event-k)
-     {:http-xhrio {:method           :post
+   (fn [_ [event-k uri]]
+     (timbre/debug event-k uri)
+     {:http-xhrio {:method           :get
                    :uri              uri
                    :with-credentials true
                    :headers          {}
-                   :params           (or params {})
-                   :format           (ajax/json-request-format)
                    :timeout          8000
                    :response-format  (ajax/json-response-format {:keywords? true})
                    :on-success       [::receive-tile-config]
@@ -134,7 +132,7 @@
   ;; create all new markers from data
   (->> new-markers
        (map (fn create-marker
-              [{:keys [id lat-lng marker-attributes tooltip]
+              [{:keys [lat-lng marker-attributes tooltip]
                 :or {marker-attributes {:stroke true :color "magenta"}}
                 :as marker-data}]
               (let [marker-obj

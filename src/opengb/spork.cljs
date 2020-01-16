@@ -28,7 +28,8 @@
 (def DesignNote design-note/DesignNote)
 
 (def init-design-notes
-  "Enables re-frame-driven showing/hiding of design notes.
+  "[]
+   Enables re-frame-driven showing/hiding of design notes.
    Provides these re-frame events:
 
    `[:opengb.spork.design-note/show]`
@@ -40,7 +41,7 @@
   design-note/register)
 
 (def init-map
-  "[uri]
+  "[]
 
    Enables re-frame integration for pulling leaflet config from a supplied
    endpoint.

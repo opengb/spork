@@ -1,6 +1,5 @@
 (ns opengb.figwheel-handler
   (:require
-   [clojure.spec.alpha :as s]
    [clojure.data.json :as json]
    [figwheel.server.ring]
    [opengb.spork.leaflet-specs :as leaflet-specs]

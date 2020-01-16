@@ -74,11 +74,11 @@
       [:<>
        [:div {:style {:margin-bottom "1rem"
                       :display "flex"}}
-        [:button {:on-click #(do (leaflet/register-re-frame "/tile-config")
+        [:button {:on-click #(do (leaflet/register-re-frame)
                                  (swap! *config-state assoc :registered? true))
                   :style button-style}
          "Register config handlers"]
-        [:button {:on-click #(dispatch [::leaflet/request-tile-config])
+        [:button {:on-click #(dispatch [::leaflet/request-tile-config "/tile-config"])
                   :style button-style
                   :disabled (not (:registered? @*config-state))}
          "Request config"]
