@@ -16,7 +16,6 @@
 (s/def ::attribution ::non-empty-string)
 (s/def ::subdomains  ::non-empty-string)
 (s/def ::url         ::non-empty-string)
-(s/def ::center      ::point)
 (s/def ::min-zoom    ::zoom)
 (s/def ::max-zoom    ::zoom)
 

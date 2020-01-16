@@ -106,7 +106,7 @@
         *marker-layers   (atom [])]
     (reagent/create-class
      {:component-did-mount
-      (fn map-did-mount [c more]
+      (fn map-did-mount [c]
         (let [{:keys [initial-lat-lng
                       initial-zoom
                       min-zoom
@@ -127,15 +127,21 @@
                :as _props} (reagent/props c)
               min-zoom (min min-zoom initial-zoom)
               max-zoom (max max-zoom initial-zoom)]
-          (reset! *leaflet-map ^js/Leaflet.Map (.map ^js/Leaflet leaflet
-                                                     @*react-ref
-                                                     (clj->js {:drawControl show-draw-control
-                                                               :zoomControl show-zoom-control
-                                                               :scrollWheelZoom false
-                                                               :zIndex z-index
-                                                               :minZoom min-zoom
-                                                               :maxZoom max-zoom})))
+          (reset! *leaflet-map
+                  ^js/Leaflet.Map (.map ^js/Leaflet leaflet
+                                        @*react-ref
+                                        (clj->js {:drawControl     show-draw-control
+                                                  :zoomControl     show-zoom-control
+                                                  :scrollWheelZoom false
+                                                  :zIndex          z-index
+                                                  :minZoom         min-zoom
+                                                  :maxZoom         max-zoom})))
+
+          (assert ::leaflet-specs/point initial-lat-lng)
+          (assert ::leaflet-specs/zoom  initial-zoom)
           (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom)
+
+          ;; set up tile layer
           (cond
            use-default-tiles?
            (do (reset! *base-tile-layer (make-base-tile-layer default-tile-config))
