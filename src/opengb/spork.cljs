@@ -1,10 +1,10 @@
 (ns opengb.spork
   (:require
-   [markdown-to-hiccup.core :as md]
    [opengb.spork.design-note :as design-note]
    [opengb.spork.error-boundary :as error-boundary]
    [opengb.spork.keyboard-listener :as kb]
    [opengb.spork.leaflet :as leaflet]
+   [opengb.spork.markdown :as markdown]
    [opengb.spork.quantity :as qty]
    [opengb.spork.vega :as vega]
    [opengb.spork.virtualized :as virtualized]))
@@ -40,13 +40,9 @@
    `[:opengb.spork.design-note/showing?]`"
   design-note/register-re-frame-handlers)
 
-(defn Markdown
-  "Renders a markdown string.
+(def ^:deprecated Markdown markdown/Markdown->Hiccup)
 
-   Example: `[Markdown \"* a markdown string *\"]` will be rendered by this
-   component into something like `[:strong \"a markdown string\"]`."
-  [s]
-  (md/component (md/md->hiccup s)))
+(def Markdown->Hiccup markdown/Markdown->Hiccup)
 
 (def ErrorBoundary error-boundary/ErrorBoundary)
 
