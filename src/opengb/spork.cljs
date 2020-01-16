@@ -45,12 +45,12 @@
    Enables re-frame integration for pulling leaflet config from a supplied
    endpoint.
 
-   Provides these re-frame events:
+   Provides this re-frame event:
 
-   `[:opengb.spork.leaflet/request-config]`
+   `[:opengb.spork.leaflet/request-tile-config]`
 
    Provides this re-frame subscription:
-   `[:opengb.spork.leaflet/config]`"
+   `[:opengb.spork.leaflet/tile-config]`"
   leaflet/register-re-frame)
 
 (defn Markdown
