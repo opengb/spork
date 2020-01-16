@@ -9,7 +9,9 @@
    [opengb.spork.vega :as vega]
    [opengb.spork.virtualized :as virtualized]))
 
-(def Map leaflet/Map)
+(def ^:deprecated Map leaflet/CircleMarkerMap)
+
+(def CircleMarkerMap leaflet/CircleMarkerMap)
 
 (def Chart vega/Chart)
 

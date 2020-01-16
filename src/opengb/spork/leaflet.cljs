@@ -158,8 +158,8 @@
                 (.addTo marker-obj leaflet-map))))
        (doall)))
 
-(defn Map
-  "Wrap leaflet map"
+(defn CircleMarkerMap
+  "Shows circle markers with tooltips and click handlers on a Leaflet map."
   [_props]
   (let [*react-ref       (reagent/atom nil)
         *leaflet-map     (atom nil)
