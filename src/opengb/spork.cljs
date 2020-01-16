@@ -47,7 +47,7 @@
 
    Provides this re-frame event:
 
-   `[:opengb.spork.leaflet/request-tile-config]`
+   `[:opengb.spork.leaflet/request-tile-config {:some-optional \"POST params\"}]`
 
    Provides this re-frame subscription:
    `[:opengb.spork.leaflet/tile-config]`"

@@ -15,13 +15,16 @@
 ;; provide uri to this handler in `(register-re-frame uri)` on the cljs side
 
 ; (require '[clojure.data.json :as json])
+; (require '[clojure.spec.alpha :as s])
 ; (require '[ring.util.response :as response])
 ; (defn tile-config-handler
-;   [_req]
-;   (-> a-valid-tile-config ;; see specs
-;       (json/write-str)
-;       (response/response)
-;       (response/content-type "application/json")))
+;   [req]
+;   (let [config (a-valid-tile-config (:body-params req))]
+;     (assert (s/valid? ::leaflet-specs/leaflet-tile-config config))
+;     (-> config
+;         (json/write-str)
+;         (response/response)
+;         (response/content-type "application/json"))))
 
 ;; * re-frame event/sub plumbing
 
