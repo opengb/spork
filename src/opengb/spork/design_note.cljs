@@ -5,9 +5,19 @@
 
 (def ^:private *registered? (atom false))
 
-(defn register
+(defn register-re-frame-handlers
   "Registers `DesignNote` component for use. Usually hidden behind eg.
-   `goog.DEBUG` or a boot-time decision."
+   `goog.DEBUG` or a boot-time decision.
+
+   Enables re-frame-driven showing/hiding of design notes.
+   Provides these re-frame events:
+
+   `[:opengb.spork.design-note/show]`
+   `[:opengb.spork.design-note/hide]`
+   `[:opengb.spork.design-note/toggle]`
+
+   Provides this re-frame subscription:
+   `[:opengb.spork.design-note/showing?]`"
   []
   (reg-sub
    ::showing?

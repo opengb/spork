@@ -28,8 +28,18 @@
 
 ;; * re-frame event/sub plumbing
 
-(defn register-re-frame
+(defn register-re-frame-handlers
+  "Enables re-frame integration for pulling leaflet config from a supplied
+   endpoint.
+
+   Provides this re-frame event:
+
+   `[:opengb.spork.leaflet/request-tile-config \"https://foo.bar/where?param=hi\"]`
+
+   Provides this re-frame subscription:
+   `[:opengb.spork.leaflet/tile-config]`"
   []
+
   (timbre/debug "registering spork/Map")
 
   (re-frame/reg-event-fx

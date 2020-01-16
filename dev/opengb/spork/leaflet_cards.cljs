@@ -74,7 +74,7 @@
       [:<>
        [:div {:style {:margin-bottom "1rem"
                       :display "flex"}}
-        [:button {:on-click #(do (leaflet/register-re-frame)
+        [:button {:on-click #(do (spork/register-re-frame-handlers [:leaflet])
                                  (swap! *config-state assoc :registered? true))
                   :style button-style}
          "Register config handlers"]

@@ -27,7 +27,7 @@
 
 (def DesignNote design-note/DesignNote)
 
-(def init-design-notes
+(def ^:deprecated init-design-notes
   "[]
    Enables re-frame-driven showing/hiding of design notes.
    Provides these re-frame events:
@@ -38,21 +38,7 @@
 
    Provides this re-frame subscription:
    `[:opengb.spork.design-note/showing?]`"
-  design-note/register)
-
-(def init-map
-  "[]
-
-   Enables re-frame integration for pulling leaflet config from a supplied
-   endpoint.
-
-   Provides this re-frame event:
-
-   `[:opengb.spork.leaflet/request-tile-config {:some-optional \"POST params\"}]`
-
-   Provides this re-frame subscription:
-   `[:opengb.spork.leaflet/tile-config]`"
-  leaflet/register-re-frame)
+  design-note/register-re-frame-handlers)
 
 (defn Markdown
   "Renders a markdown string.
@@ -63,3 +49,20 @@
   (md/component (md/md->hiccup s)))
 
 (def ErrorBoundary error-boundary/ErrorBoundary)
+
+(def ^:private get-rf-initializer
+  {:design-notes design-note/register-re-frame-handlers
+   :leaflet      leaflet/register-re-frame-handlers})
+
+(defn register-re-frame-handlers
+  "Registers some or all components's re-frame handlers.
+
+   Supply an optional seq of component keywords to limit the initialization
+   to only those components."
+  ([]
+   (register-re-frame-handlers (keys get-rf-initializer)))
+  ([component-keys]
+   (let [valid-key? (set (keys get-rf-initializer))]
+   (doseq [k (filter valid-key? component-keys)
+           :let [handler (get-rf-initializer k)]]
+     (handler)))))
