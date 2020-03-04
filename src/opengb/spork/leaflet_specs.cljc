@@ -13,6 +13,9 @@
 (s/def ::zoom                  (s/or :double (s/double-in :min 0 :max 20 :infinite false :NaN? false)
                                      :int    (s/int-in 0 20)))
 
+(s/def ::lat-lng (s/tuple ::lat ::lng))
+(s/def ::bounds  (s/tuple ::lat-lng ::lat-lng))
+
 (s/def ::attribution ::non-empty-string)
 (s/def ::subdomains  ::non-empty-string)
 (s/def ::url         ::non-empty-string)

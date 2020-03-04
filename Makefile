@@ -3,6 +3,9 @@ all: unit
 unit: node_modules
 	bin/kaocha
 
+watch-unit: node_modules
+	bin/kaocha --watch
+
 build:
 	clj --main cljs.main --compile-opts prd.cljs.edn --compile opengb.spork
 

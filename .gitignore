@@ -1,6 +1,7 @@
 *.class
 *.jar
 .clj-kondo/.cache
+.cljs_node_repl/
 .cpcache/
 .lein-deps-sum
 .lein-failures
