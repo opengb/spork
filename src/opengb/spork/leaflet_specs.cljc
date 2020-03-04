@@ -9,12 +9,29 @@
 (s/def ::non-empty-string      (s/and string? #(seq %)))
 (s/def ::lat                   (s/double-in :min -90 :max 90 :infinite false :NaN? false))
 (s/def ::lng                   (s/double-in :min -180 :max 180 :infinite false :NaN? false))
+
+; this should be renamed since MapBox uses `point` to refer to anything with an x,y (could be lnglat, could be pixels.)
 (s/def ::point                 (s/cat :lat ::lat :lng ::lng))
+
 (s/def ::zoom                  (s/or :double (s/double-in :min 0 :max 20 :infinite false :NaN? false)
                                      :int    (s/int-in 0 20)))
 
-(s/def ::lat-lng (s/tuple ::lat ::lng))
-(s/def ::bounds  (s/tuple ::lat-lng ::lat-lng))
+
+(s/def ::lat-lng (s/nilable (s/cat :lat ::lat :lng ::lng)))
+(s/def ::lng-lat (s/nilable (s/cat :lng ::lng :lat ::lat)))
+(s/def ::coord   (s/nilable (s/keys :req-un [::lat ::lng])))
+
+(s/def ::has-some-coords (s/or :lat-lng (s/keys :req-un [::lat-lng])
+                               :lng-lat (s/keys :req-un [::lng-lat])
+                               :coords  (s/keys :req-un [::coords])))
+
+
+(s/def ::north-east ::coord)
+(s/def ::south-west ::coord)
+(s/def ::bounds (s/keys :req-un [::north-east ::south-west]))
+
+(s/def ::leaflet-coord ::lat-lng)
+(s/def ::leaflet-bounds (s/tuple ::leaflet-coord ::leaflet-coord))
 
 (s/def ::attribution ::non-empty-string)
 (s/def ::subdomains  ::non-empty-string)
