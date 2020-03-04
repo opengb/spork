@@ -3,5 +3,5 @@
           :type :kaocha.type/cljs
           :source-paths ["src"]
           :test-paths ["test"]
-          :cljs/compiler-options {}}]
+          :cljs/compiler-options {:foreign-libs [{:file "test/shims/window.js"}]}}]
  :plugins [:kaocha.plugin/notifier]}
