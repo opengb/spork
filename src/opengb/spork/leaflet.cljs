@@ -6,6 +6,7 @@
    [clojure.spec.alpha :as s]
    [day8.re-frame.http-fx]
    [leaflet]
+   [opengb.spork.leaflet-helpers :as h]
    [opengb.spork.leaflet-specs :as leaflet-specs]
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
@@ -110,23 +111,6 @@
 
 ;; * Reagent component
 
-(defn find-marker-bounds
-  "Finds bounding box of given markers, and returns map containing center point
-   and zoom level required to fit bounds on given map."
-  [leaflet-map markers]
-  (let [lat-lngs (map :lat-lng markers)
-        lats     (map first lat-lngs)
-        lngs     (map second lat-lngs)
-        north    (apply max lngs)
-        east     (apply max lats)
-        south    (apply min lngs)
-        west     (apply min lats)
-        bounds   [[east north] [west south]]
-        zoom     (.getBoundsZoom leaflet-map (clj->js bounds))
-        mid      (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
-        center   [(mid lats) (mid lngs)]]
-    {:initial-lat-lng center :initial-zoom zoom}))
-
 (defn draw-markers
   [leaflet-map *marker-layers new-markers on-marker-click]
 
@@ -141,6 +125,9 @@
 
   ;; create all new markers from data
   (->> new-markers
+       (filter #(s/valid?
+                 ::leaflet-specs/non-nil-lat-lng
+                 (:lat-lng %)))
        (map (fn create-marker
               [{:keys [lat-lng marker-attributes tooltip]
                 :or {marker-attributes {:stroke true :color "magenta"}}
@@ -208,9 +195,14 @@
           (if (and fit-to-markers? (not-empty markers))
 
             ;; calc zoom and center
-            (let [{:keys [initial-lat-lng
-                          initial-zoom]} (find-marker-bounds @*leaflet-map markers)]
-              (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom))
+            (let [{:keys [initial-center initial-bounds]} (h/find-marker-center-and-bounds markers)
+                  initial-zoom (.getBoundsZoom @*leaflet-map (-> initial-bounds
+                                                                 h/bounds->leaflet
+                                                                 clj->js))]
+              (.setView @*leaflet-map (-> initial-center
+                                          h/coord->leaflet
+                                          clj->js)
+                        initial-zoom))
 
             ;; use supplied vals
             (do (assert ::leaflet-specs/point initial-lat-lng)
