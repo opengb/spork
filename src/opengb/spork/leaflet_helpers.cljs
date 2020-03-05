@@ -25,18 +25,19 @@
   "Returns map containing the center point and bounds of given markers."
   [markers]
   {:post [(s/valid? (s/keys :req-un [::initial-center ::initial-bounds]) %)]}
-  (let [coord-markers (map normalize-coordinates markers)
+  (let [mid           (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
+        coord-markers (->> markers
+                           (map normalize-coordinates)
+                           (filter #(s/valid? ::leaflet-specs/non-nil-coord (:coord %))))
         coords        (map :coord coord-markers)
-        valid-coords  (filter some? coords)
-        lats          (map :lat valid-coords)
-        lngs          (map :lng valid-coords)
-        north         (apply max lngs)
-        east          (apply max lats)
-        south         (apply min lngs)
-        west          (apply min lats)
-        bounds        {:north-east {:lng north :lat east}
-                       :south-west {:lng south :lat west}}
-        mid           (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
+        lats          (map :lat coords)
+        lngs          (map :lng coords)
+        north         (apply max lats)
+        east          (apply max lngs)
+        south         (apply min lats)
+        west          (apply min lngs)
+        bounds        {:north-east {:lat north :lng east}
+                       :south-west {:lat south :lng west}}
         center        {:lat (mid lats) :lng (mid lngs)}]
     {:initial-center center :initial-bounds bounds}))
 

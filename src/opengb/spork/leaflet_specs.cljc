@@ -18,12 +18,14 @@
 
 
 (s/def ::lat-lng (s/nilable (s/cat :lat ::lat :lng ::lng)))
-(s/def ::lng-lat (s/nilable (s/cat :lng ::lng :lat ::lat)))
-
 (s/def ::non-nil-lat-lng (s/and some? ::lat-lng))
+
+(s/def ::lng-lat (s/nilable (s/cat :lng ::lng :lat ::lat)))
 (s/def ::non-nil-lng-lat (s/and some? ::lng-lat))
 
 (s/def ::coord   (s/nilable (s/keys :req-un [::lat ::lng])))
+(s/def ::non-nil-coord (s/and some? ::coord))
+
 (s/def ::has-some-coord (s/or :lat-lng (s/keys :req-un [::lat-lng])
                               :lng-lat (s/keys :req-un [::lng-lat])
                               :coord   (s/keys :req-un [::coord])))
