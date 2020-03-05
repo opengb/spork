@@ -49,6 +49,20 @@
    :use-default-tiles? true}
   {:inspect-data true})
 
+(defcard-rg AutoFittingDefaults
+  "A map will auto-fit to a default showing all of Canada if
+  no valid markers are supplied and `fit-to-map?` is true"
+  (fn [*props _]
+    [spork/Map @*props])
+  {:fit-to-markers? true
+   :markers [{:id 1 :lat-lng [-123.1207 49.2827] :tooltip "Vancouver"
+              :marker-attributes {:stroke true :color "red"}}
+             {:id 2 :lat-lng "19.4326, -99.1332" :tooltip "Mexico City"
+              :marker-attributes {:stroke true :color "blue"}}]
+   :on-marker-click #(js/alert (str "marker click " %))
+   :use-default-tiles? true}
+  {:inspect-data true})
+
 (defn SubscribingSporkMap
   []
   (let [*config (subscribe [::leaflet/tile-config])]

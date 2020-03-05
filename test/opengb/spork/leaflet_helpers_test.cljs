@@ -8,7 +8,15 @@
     (is (= {:coord {:lat 49.5 :lng -123.5}} (sut/normalize-coordinates {:lng-lat [-123.5 49.5]})))
     (is (= {:coord {:lat 49.5 :lng -123.5}} (sut/normalize-coordinates {:coord {:lat 49.5 :lng -123.5}}))))
   (testing "Maps without a valid coordinate should return {:coord nil}"
-    (is (= {:coord nil} (sut/normalize-coordinates {})))))
+    (is (let [{:keys [coord] :as output} (sut/normalize-coordinates {})]
+          (and (contains? output :coord)
+               (nil? coord))))
+    (is (let [{:keys [coord] :as output} (sut/normalize-coordinates {:lat-lng [-123.5 49.5]})]
+          (and (contains? output :coord)
+               (nil? coord))))
+    (is (let [{:keys [coord] :as output} (sut/normalize-coordinates {:lat-lng "-49.5, -123.5"})]
+          (and (contains? output :coord)
+               (nil? coord))))))
 
 (deftest find-marker-center-and-bounds-test
   (testing "Valid markers should return bounds."
@@ -30,7 +38,15 @@
              initial-center))
       (is (= {:north-east {:lat 49.283 :lng -123.1207}
               :south-west {:lat 49.2827 :lng -123.1235}}
-             initial-bounds)))))
+             initial-bounds))))
+
+  (testing "Input with no valid markers should return default center and bounds"
+    (is sut/default-center-and-bounds
+        (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [-123.1207 49.2827]}
+                                            {:id 2 :lat-lng "49.2830 -123.1235"}
+                                            {:id 3 :lat-lng nil}])))
+
+  )
 
 (deftest coord->leaflet
   (testing "Normalized coords should become leaflet coords"
