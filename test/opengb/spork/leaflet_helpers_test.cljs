@@ -44,9 +44,7 @@
     (is sut/default-center-and-bounds
         (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [-123.1207 49.2827]}
                                             {:id 2 :lat-lng "49.2830 -123.1235"}
-                                            {:id 3 :lat-lng nil}])))
-
-  )
+                                            {:id 3 :lat-lng nil}]))))
 
 (deftest coord->leaflet
   (testing "Normalized coords should become leaflet coords"
@@ -57,4 +55,4 @@
   (testing "Normalized bounds should become leaflet bounds"
     (is (= [[49.283 -123.1207] [49.2827 -123.1235]]
            (sut/bounds->leaflet {:north-east {:lat 49.283 :lng -123.1207}
-                                 :south-west {:lat 49.2827 :lng -123.1235}}) ))))
+                                 :south-west {:lat 49.2827 :lng -123.1235}})))))

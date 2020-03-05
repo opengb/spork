@@ -47,8 +47,7 @@
                            :south-west {:lat south :lng west}}
             center        {:lat (mid lats) :lng (mid lngs)}]
         {:initial-center center :initial-bounds bounds})
-      default-center-and-bounds
-      )))
+      default-center-and-bounds)))
 
 (defn coord->leaflet
   "Converts a coordinate map to [lat lng]"
