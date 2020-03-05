@@ -192,14 +192,13 @@
           (if (and fit-to-markers? (not-empty markers))
 
             ;; calc zoom and center
-            (let [{:keys [initial-center initial-bounds]} (h/find-marker-bounds markers)
+            (let [{:keys [initial-center initial-bounds]} (h/find-marker-center-and-bounds markers)
                   initial-zoom (.getBoundsZoom @*leaflet-map (-> initial-bounds
                                                                  h/bounds->leaflet
                                                                  clj->js))]
-              (.setView @*leaflet-map
-                        (-> initial-center
-                            h/coord->leaflet
-                            clj->js)
+              (.setView @*leaflet-map (-> initial-center
+                                          h/coord->leaflet
+                                          clj->js)
                         initial-zoom))
 
             ;; use supplied vals
