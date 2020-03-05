@@ -31,7 +31,8 @@
   {:initial-lat-lng [49.2827 -123.1207]
    :initial-zoom 16
    :markers [{:id 1 :lat-lng [49.2827 -123.1207]}
-             {:id 2 :lat-lng [49.2830 -123.1235]}]
+             {:id 2 :lat-lng [49.2830 -123.1235]}
+             {:id 3 :lat-lng nil}]
    :use-default-tiles? true}
   {:inspect-data true})
 

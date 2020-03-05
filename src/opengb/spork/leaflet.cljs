@@ -125,6 +125,9 @@
 
   ;; create all new markers from data
   (->> new-markers
+       (filter #(s/valid?
+                 ::leaflet-specs/non-nil-lat-lng
+                 (:lat-lng %)))
        (map (fn create-marker
               [{:keys [lat-lng marker-attributes tooltip]
                 :or {marker-attributes {:stroke true :color "magenta"}}
