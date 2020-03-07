@@ -92,7 +92,7 @@
   {:post [(s/valid? (s/keys :req-un [::initial-center ::initial-bounds]) %)]}
   (let [coord-markers (->> markers
                            (map normalize-coordinates)
-                           (filter #(s/valid? ::non-nil-coord (:coord %))))]
+                           (remove nil-coords?))]
     (if (not-empty coord-markers)
       (let [mid           (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
             coords        (map :coord coord-markers)
