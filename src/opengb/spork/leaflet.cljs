@@ -191,7 +191,7 @@
 
           ;; set initial zoom / centre on mount only, so we don't blow
           ;; away the user's position on new data
-          (if (and fit-to-markers? (not-empty markers))
+          (if fit-to-markers?
 
             ;; calc zoom and center
             (let [{:keys [initial-center initial-bounds]} (geo/find-marker-center-and-bounds markers)
