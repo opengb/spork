@@ -1,6 +1,8 @@
-(ns opengb.spork.leaflet-helpers-test
-  (:require [cljs.test :refer-macros [deftest testing is]]
-            [opengb.spork.leaflet-helpers :as sut]))
+(ns opengb.spork.geo-test
+  (:require
+   [opengb.spork.geo :as sut]
+   #?(:clj [clojure.test :refer [deftest testing is]]
+      :cljs [cljs.test :refer-macros [deftest testing is]])))
 
 (deftest normalize-coordinates-test
   (testing "Lat-first, Lng-first, and already normalized coordinates should all work."
@@ -46,12 +48,14 @@
                                             {:id 2 :lat-lng "49.2830 -123.1235"}
                                             {:id 3 :lat-lng nil}]))))
 
-(deftest coord->leaflet
+(deftest coord->leaflet-test
   (testing "Normalized coords should become leaflet coords"
     (is (= [49.283 -123.1207]
-           (sut/coord->leaflet {:lat 49.283 :lng -123.1207})))))
+           (sut/coord->leaflet {:lat 49.283 :lng -123.1207}))))
+  (testing "Nil coord should return nil"
+    (is (nil? (sut/coord->leaflet nil)))))
 
-(deftest bounds->leaflet
+(deftest bounds->leaflet-test
   (testing "Normalized bounds should become leaflet bounds"
     (is (= [[49.283 -123.1207] [49.2827 -123.1235]]
            (sut/bounds->leaflet {:north-east {:lat 49.283 :lng -123.1207}

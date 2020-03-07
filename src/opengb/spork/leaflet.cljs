@@ -6,8 +6,8 @@
    [clojure.spec.alpha :as s]
    [day8.re-frame.http-fx]
    [leaflet]
-   [opengb.spork.leaflet-helpers :as h]
    [opengb.spork.leaflet-specs :as leaflet-specs]
+   [opengb.spork.geo :as geo]
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [taoensso.timbre :as timbre]))
@@ -125,17 +125,16 @@
 
   ;; create all new markers from data
   (->> new-markers
-       (filter #(s/valid?
-                 ::leaflet-specs/non-nil-lat-lng
-                 (:lat-lng %)))
+       (map geo/normalize-coordinates)
+       (remove geo/nil-coords?)
        (map (fn create-marker
-              [{:keys [lat-lng marker-attributes tooltip]
+              [{:keys [coord marker-attributes tooltip]
                 :or {marker-attributes {:stroke true :color "magenta"}}
                 :as marker-data}]
               (let [marker-obj
                     ^js/Leaflet.CircleMarker
                     (.circleMarker ^js/Leaflet leaflet
-                                   (clj->js lat-lng)
+                                   (geo/coord->leaflet-js coord)
                                    (clj->js marker-attributes))]
                 (when tooltip
                   (.bindTooltip marker-obj tooltip #js {:direction "top"}))
@@ -195,18 +194,14 @@
           (if (and fit-to-markers? (not-empty markers))
 
             ;; calc zoom and center
-            (let [{:keys [initial-center initial-bounds]} (h/find-marker-center-and-bounds markers)
-                  initial-zoom (.getBoundsZoom @*leaflet-map (-> initial-bounds
-                                                                 h/bounds->leaflet
-                                                                 clj->js))]
-              (.setView @*leaflet-map (-> initial-center
-                                          h/coord->leaflet
-                                          clj->js)
+            (let [{:keys [initial-center initial-bounds]} (geo/find-marker-center-and-bounds markers)
+                  initial-zoom (.getBoundsZoom @*leaflet-map (geo/bounds->leaflet-js initial-bounds))]
+              (.setView @*leaflet-map (geo/coord->leaflet-js initial-center)
                         initial-zoom))
 
             ;; use supplied vals
-            (do (assert ::leaflet-specs/point initial-lat-lng)
-                (assert ::leaflet-specs/zoom  initial-zoom)
+            (do (assert ::geo/leaflet-coord initial-lat-lng)
+                (assert ::geo/zoom  initial-zoom)
                 (.setView @*leaflet-map (clj->js initial-lat-lng) initial-zoom)))
 
           ;; set up tile layer
