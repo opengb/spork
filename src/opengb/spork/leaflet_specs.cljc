@@ -1,7 +1,7 @@
 (ns opengb.spork.leaflet-specs
   (:require
    [clojure.spec.alpha :as s]
-   [opengb.spork.geo :as geo]))
+   [opengb.geo :as geo]))
 
 ;; consider moving these to an overall opengb spec lib;
 ;; stay away until grid is also relying on this proj so we don't clobber ourselves by including

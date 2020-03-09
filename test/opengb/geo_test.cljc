@@ -1,6 +1,6 @@
-(ns opengb.spork.geo-test
+(ns opengb.geo-test
   (:require
-   [opengb.spork.geo :as sut]
+   [opengb.geo :as sut]
    #?(:clj [clojure.test :refer [deftest testing is]]
       :cljs [cljs.test :refer-macros [deftest testing is]])))
 

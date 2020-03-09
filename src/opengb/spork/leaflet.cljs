@@ -7,7 +7,7 @@
    [day8.re-frame.http-fx]
    [leaflet]
    [opengb.spork.leaflet-specs :as leaflet-specs]
-   [opengb.spork.geo :as geo]
+   [opengb.geo :as geo]
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [taoensso.timbre :as timbre]))

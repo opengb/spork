@@ -1,4 +1,4 @@
-(ns opengb.spork.geo
+(ns opengb.geo
   (:require
    [clojure.spec.alpha :as s]))
 
