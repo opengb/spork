@@ -1,4 +1,4 @@
-(ns spork.macros)
+(ns opengb.spork.macros)
 
 (defmacro read-vega-spec
   "Strip in and parse a Vega spec at compile time. Lets us keep these as JSON
