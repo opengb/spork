@@ -2,8 +2,7 @@
   (:require
    [devcards.core :refer [defcard defcard-rg]]
    [opengb.spork.leaflet-cards] ;; require for effect
-   [reagent.core :as r]
-   [stylefy.core :as stylefy]))
+   [reagent.core :as r]))
 
 (defcard example
   "A simple test card rendered with `defcard`"

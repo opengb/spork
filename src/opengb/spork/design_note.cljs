@@ -1,7 +1,6 @@
 (ns opengb.spork.design-note
   (:require
-   [re-frame.core :refer [subscribe reg-sub reg-event-db]]
-   [stylefy.core :refer [use-style]]))
+   [re-frame.core :refer [subscribe reg-sub reg-event-db]]))
 
 (def ^:private *registered? (atom false))
 
@@ -52,8 +51,8 @@
       (fn [s]
         (when @*show?
           [:div.design-note
-           (use-style {:color color
-                       :border (str "1px solid " color)
-                       :padding "0.25em"
-                       :margin "0.15em 0"})
+           {:style {:color color
+                    :border (str "1px solid " color)
+                    :padding "0.25em"
+                    :margin "0.15em 0"}}
            s])))))
