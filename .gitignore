@@ -1,5 +1,6 @@
 *.class
 *.jar
+.DS_Store
 .clj-kondo/.cache
 .cljs_node_repl/
 .cpcache/
