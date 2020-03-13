@@ -40,9 +40,9 @@
 
 
 ;; * Coordinate Normalization
-(defn parse-float
+(defn parse-number
   [s]
-  #?(:clj  (Float. s)
+  #?(:clj  (Double. s)
      :cljs (js/parseFloat s)))
 
 (defn geom->coord
@@ -51,8 +51,8 @@
    :post [(s/valid? ::coord %)]}
   (if geom
     (let [[_ lng-string _ lat-string _] (re-matches geom-re geom)]
-      {:lat (parse-float lat-string)
-       :lng (parse-float lng-string)})
+      {:lat (parse-number lat-string)
+       :lng (parse-number lng-string)})
     nil))
 
 (defn normalize-coordinates
