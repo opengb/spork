@@ -12,16 +12,21 @@
                                 :int    (s/int-in 0 20)))
 
 ;; ** Coordinate Types
+
+; {:lat 49.0 :lng -123.0}
 (s/def ::coord   (s/nilable (s/keys :req-un [::lat ::lng])))
 (s/def ::non-nil-coord (s/and some? ::coord))
 
+; "(-123.0,49.0)"
 (def geom-re #"\((-?\d+(.\d+)?),(-?\d+(.\d+)?)\)")
 (s/def ::geom (s/nilable #(re-matches geom-re %)))
 (s/def ::non-nil-geom (s/and some? ::geom))
 
+; [49.0 -123.0]
 (s/def ::lat-lng (s/nilable (s/cat :lat ::lat :lng ::lng)))
 (s/def ::non-nil-lat-lng (s/and some? ::lat-lng))
 
+; [-123.0 49.0]
 (s/def ::lng-lat (s/nilable (s/cat :lng ::lng :lat ::lat)))
 (s/def ::non-nil-lng-lat (s/and some? ::lng-lat))
 
@@ -81,7 +86,7 @@
 (def default-center-and-bounds
   "Should show all of Canada. Don't want the map to blow up without valid inputs,
   and this should hopefully illustrate that there isn't anything on the map."
-  {:initial-center {:lat 55.0 :lng -105.0}
+  {:initial-center  {:lat 55.0 :lng -105.0}
    :initial-bounds  {:north-east {:lat 70.0 :lng -50.0}
                      :south-west {:lat 40.0 :lng -140.0}}})
 
