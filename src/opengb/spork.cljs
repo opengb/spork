@@ -8,12 +8,13 @@
    [opengb.spork.markdown          :as markdown]
    [opengb.spork.quantity          :as qty]
    [opengb.spork.vega              :as vega]
+   [opengb.spork.vega2             :as vega2]
    [opengb.spork.virtualized       :as virtualized]))
 
 ;; * Public API facades
 
 (def AutoSizer          virtualized/AutoSizer)
-(def Chart              vega/Chart)
+(def ^:deprecated Chart vega/Chart)
 (def CircleMarkerMap    leaflet/CircleMarkerMap)
 (def DesignNote         design-note/DesignNote)
 (def ErrorBoundary      error-boundary/ErrorBoundary)
@@ -23,6 +24,7 @@
 (def StretchHeight      virtualized/AutoHeighter)
 (def StretchHeightWidth virtualized/AutoSizer2)
 (def StretchWidth       virtualized/AutoWidther)
+(def VegaRenderer       vega2/VegaRenderer)
 
 ;; * re-frame handler registration
 
