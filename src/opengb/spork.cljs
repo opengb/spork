@@ -17,6 +17,7 @@
 (def ^:deprecated Chart vega/Chart)
 (def CircleMarkerMap    leaflet/CircleMarkerMap)
 (def DesignNote         design-note/DesignNote)
+(def DataViewer         design-note/DataViewer)
 (def ErrorBoundary      error-boundary/ErrorBoundary)
 (def KeyboardListener   kb/KeyboardListener)
 (def Markdown->Hiccup   markdown/Markdown->Hiccup)

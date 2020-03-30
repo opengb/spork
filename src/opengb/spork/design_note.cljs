@@ -1,5 +1,6 @@
 (ns opengb.spork.design-note
   (:require
+   [clojure.pprint :as pp]
    [re-frame.core :refer [subscribe reg-sub reg-event-db]]))
 
 (def ^:private *registered? (atom false))
@@ -56,3 +57,16 @@
                     :padding "0.25em"
                     :margin "0.15em 0"}}
            s])))))
+
+(defn DataViewer
+  "Annotates the site such that we can show bits of formatted data in a
+   <details>, hidden by default and exposed them with re-frame events. Only
+   takes effect if `register` has been invoked."
+  [_summary _x]
+  (when @*registered?
+    (let [*show? (subscribe [::showing?])]
+      (fn [summary data]
+        (when @*show?
+          [:details {:style {:color "orange"}}
+           [:summary summary]
+           [:code [:pre (with-out-str (pp/pprint data))]]])))))
