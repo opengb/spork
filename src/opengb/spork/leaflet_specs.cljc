@@ -9,9 +9,14 @@
 
 (s/def ::non-empty-string      (s/and string? #(seq %)))
 
-(s/def ::attribution ::non-empty-string)
+(s/def ::en-CA ::non-empty-string)
+(s/def ::fr-CA ::non-empty-string)
+(s/def ::localizable-string (s/or :default   ::non-empty-string
+                                  :localized (s/keys :req-un [::en-CA ::fr-CA])))
+
+(s/def ::attribution ::localizable-string)
+(s/def ::url         ::localizable-string)
 (s/def ::subdomains  ::non-empty-string)
-(s/def ::url         ::non-empty-string)
 (s/def ::min-zoom    ::geo/zoom)
 (s/def ::max-zoom    ::geo/zoom)
 
