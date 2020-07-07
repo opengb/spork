@@ -3,7 +3,7 @@
    [devcards.core :refer [defcard-rg]]
    [opengb.spork :as spork]
    [opengb.spork.dark-launch :as dark-launch]
-   [re-frame.core :as re-frame :refer [dispatch subscribe]]
+   [re-frame.core :as re-frame :refer [dispatch]]
    [reagent.core :as reagent]))
 
 (defn- register-demo-features
