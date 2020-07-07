@@ -23,5 +23,4 @@
 
 (defn ^:export init
   []
-  (stylefy/init)
   (mount))
