@@ -104,7 +104,8 @@
                      :font-weight   "bold"
                      :border-bottom "1px solid #dedede"}}
          "Dark Launch"]
-        [:div {:class "dark-launch-panel-features-list"}
+        [:div {:class "dark-launch-panel-features-list"
+               :style {:padding "1rem 0"}}
          (doall (for [k    @*features
                       :let [enabled? (k @*feature-states)]]
                   ^{:key k}
