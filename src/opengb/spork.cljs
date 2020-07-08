@@ -1,6 +1,7 @@
 (ns opengb.spork
   "Reagent/Re-Frame view component library."
   (:require
+   [opengb.spork.dark-launch       :as dark-launch]
    [opengb.spork.design-note       :as design-note]
    [opengb.spork.error-boundary    :as error-boundary]
    [opengb.spork.keyboard-listener :as kb]
@@ -19,6 +20,8 @@
 (def DesignNote         design-note/DesignNote)
 (def DataViewer         design-note/DataViewer)
 (def ErrorBoundary      error-boundary/ErrorBoundary)
+(def FeaturePanel       dark-launch/Panel)
+(def IfFeature          dark-launch/If)
 (def KeyboardListener   kb/KeyboardListener)
 (def Markdown->Hiccup   markdown/Markdown->Hiccup)
 (def Quantity           qty/Quantity)
@@ -26,11 +29,13 @@
 (def StretchHeightWidth virtualized/AutoSizer2)
 (def StretchWidth       virtualized/AutoWidther)
 (def VegaRenderer       vega2/VegaRenderer)
+(def WhenFeature        dark-launch/When)
 
 ;; * re-frame handler registration
 
 (def ^:private get-rf-initializer
-  {:design-notes design-note/register-re-frame-handlers
+  {:dark-launch  dark-launch/register-re-frame-handlers
+   :design-notes design-note/register-re-frame-handlers
    :leaflet      leaflet/register-re-frame-handlers})
 
 (defn register-re-frame-handlers
