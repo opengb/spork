@@ -48,6 +48,8 @@
 
 
 ;; * Coordinate Normalization
+
+
 (defn parse-number
   [s]
   #?(:clj  (Double. s)
