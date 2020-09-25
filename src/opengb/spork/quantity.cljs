@@ -2,8 +2,7 @@
   (:require
    [goog.i18n.NumberFormat.Format]
    [opengb.dram.quantity]
-   [reagent.core :as reagent]
-   [stylefy.core :refer [use-style]])
+   [reagent.core :as reagent])
   (:import (goog.i18n NumberFormat)
            (goog.i18n.NumberFormat Format)))
 
@@ -25,9 +24,9 @@
 
 (defn Unit
   [k]
-  [:span.unit (use-style {:margin-left    "0.25em"
-                          :text-transform "none !important"
-                          :opacity        0.4})
+  [:span.unit {:style {:margin-left    "0.25em !important"
+                       :text-transform "none !important"
+                       :opacity        "0.4 !important"}}
    (opengb.dram.quantity/unit->ui-string k)])
 
 (defn Quantity

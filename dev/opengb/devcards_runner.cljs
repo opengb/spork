@@ -1,9 +1,9 @@
 (ns ^:figwheel-hooks opengb.devcards-runner
   (:require
    [devcards.core :refer [defcard defcard-rg]]
-   [opengb.spork.leaflet-cards] ;; require for effect
-   [reagent.core :as r]
-   [stylefy.core :as stylefy]))
+   [opengb.spork.dark-launch-cards]
+   [opengb.spork.leaflet-cards]
+   [reagent.core :as r]))
 
 (defcard example
   "A simple test card rendered with `defcard`"
@@ -23,5 +23,4 @@
 
 (defn ^:export init
   []
-  (stylefy/init)
   (mount))
