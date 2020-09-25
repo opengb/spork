@@ -5,23 +5,31 @@
 
 ;; * Specs
 
+
 (s/def ::non-empty-string (s/and string? #(seq %)))
-(s/def ::lat              (s/double-in :min -90 :max 90 :infinite false :NaN? false))
-(s/def ::lng              (s/double-in :min -180 :max 180 :infinite false :NaN? false))
+(s/def ::lat              (s/or :double (s/double-in :min -90 :max 90 :infinite false :NaN? false)
+                                :int    (s/int-in -90 90)))
+(s/def ::lng              (s/or :double (s/double-in :min -180 :max 180 :infinite false :NaN? false)
+                                :int    (s/int-in -180 180)))
 (s/def ::zoom             (s/or :double (s/double-in :min 0 :max 20 :infinite false :NaN? false)
                                 :int    (s/int-in 0 20)))
 
 ;; ** Coordinate Types
+
+; {:lat 49.0 :lng -123.0}
 (s/def ::coord   (s/nilable (s/keys :req-un [::lat ::lng])))
 (s/def ::non-nil-coord (s/and some? ::coord))
 
+; "(-123.0,49.0)"
 (def geom-re #"\((-?\d+(.\d+)?),(-?\d+(.\d+)?)\)")
 (s/def ::geom (s/nilable #(re-matches geom-re %)))
 (s/def ::non-nil-geom (s/and some? ::geom))
 
+; [49.0 -123.0]
 (s/def ::lat-lng (s/nilable (s/cat :lat ::lat :lng ::lng)))
 (s/def ::non-nil-lat-lng (s/and some? ::lat-lng))
 
+; [-123.0 49.0]
 (s/def ::lng-lat (s/nilable (s/cat :lng ::lng :lat ::lat)))
 (s/def ::non-nil-lng-lat (s/and some? ::lng-lat))
 
@@ -40,9 +48,11 @@
 
 
 ;; * Coordinate Normalization
-(defn parse-float
+
+
+(defn parse-number
   [s]
-  #?(:clj  (Float. s)
+  #?(:clj  (Double. s)
      :cljs (js/parseFloat s)))
 
 (defn geom->coord
@@ -51,8 +61,8 @@
    :post [(s/valid? ::coord %)]}
   (if geom
     (let [[_ lng-string _ lat-string _] (re-matches geom-re geom)]
-      {:lat (parse-float lat-string)
-       :lng (parse-float lng-string)})
+      {:lat (parse-number lat-string)
+       :lng (parse-number lng-string)})
     nil))
 
 (defn normalize-coordinates
@@ -78,10 +88,11 @@
 
 ;; Calculations
 
+
 (def default-center-and-bounds
   "Should show all of Canada. Don't want the map to blow up without valid inputs,
   and this should hopefully illustrate that there isn't anything on the map."
-  {:initial-center {:lat 55.0 :lng -105.0}
+  {:initial-center  {:lat 55.0 :lng -105.0}
    :initial-bounds  {:north-east {:lat 70.0 :lng -50.0}
                      :south-west {:lat 40.0 :lng -140.0}}})
 
@@ -108,8 +119,19 @@
         {:initial-center center :initial-bounds bounds})
       default-center-and-bounds)))
 
+(defn does-bounds-contain-coord?
+  [{:keys [north-east south-west] :as bounds}
+   {:keys [lat lng] :as coord}]
+  {:pre [(s/valid? ::coord coord)
+         (s/valid? ::bounds bounds)]}
+  (and (< lat (:lat north-east))
+       (> lat (:lat south-west))
+       (< lng (:lng north-east))
+       (> lng (:lng south-west))))
+
 
 ;; * Leaflet Specs and Conversions
+
 
 (s/def ::leaflet-coord ::lat-lng)
 (s/def ::non-nil-leaflet-coord (s/and some? ::leaflet-coord))
