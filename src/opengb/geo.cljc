@@ -7,10 +7,8 @@
 
 
 (s/def ::non-empty-string (s/and string? #(seq %)))
-(s/def ::lat              (s/or :double (s/double-in :min -90 :max 90 :infinite false :NaN? false)
-                                :int    (s/int-in -90 90)))
-(s/def ::lng              (s/or :double (s/double-in :min -180 :max 180 :infinite false :NaN? false)
-                                :int    (s/int-in -180 180)))
+(s/def ::lat              (s/double-in :min -90 :max 90 :infinite false :NaN? false))
+(s/def ::lng              (s/double-in :min -180 :max 180 :infinite false :NaN? false))
 (s/def ::zoom             (s/or :double (s/double-in :min 0 :max 20 :infinite false :NaN? false)
                                 :int    (s/int-in 0 20)))
 
