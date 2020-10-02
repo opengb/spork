@@ -48,6 +48,19 @@
                                             {:id 2 :lat-lng "49.2830 -123.1235"}
                                             {:id 3 :lat-lng nil}]))))
 
+(deftest does-bounds-contain-coord?-test
+  (let [bounds {:north-east {:lat 50.0 :lng -122.0}
+                :south-west {:lat 49.0 :lng -123.0}}]
+    (testing "Coord inside bounds should return true"
+      (is (sut/does-bounds-contain-coord? bounds {:lat 49.5 :lng -122.5})))
+    (testing "Coord outside bounds should return false"
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 50.5 :lng -122.5})))
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 48.5 :lng -122.5})))
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 49.5 :lng -121.5})))
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 49.5 :lng -123.5})))
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 50.5 :lng -121.5})))
+      (is (false? (sut/does-bounds-contain-coord? bounds {:lat 48.5 :lng -123.5}))))))
+
 (deftest coord->leaflet-test
   (testing "Normalized coords should become leaflet coords"
     (is (= [49.283 -123.1207]
