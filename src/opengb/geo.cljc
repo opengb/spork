@@ -118,6 +118,7 @@
       default-center-and-bounds)))
 
 (defn does-bounds-contain-coord?
+  "Takes in a bounds and a coord and returns true if coord is inside bounds"
   [{:keys [north-east south-west] :as bounds}
    {:keys [lat lng] :as coord}]
   {:pre [(s/valid? ::coord coord)
