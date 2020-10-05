@@ -1,5 +1,6 @@
 (ns opengb.geo-test
   (:require
+   [clojure.spec.alpha :as s]
    [opengb.geo :as sut]
    #?(:clj [clojure.test :refer [deftest testing is]]
       :cljs [cljs.test :refer-macros [deftest testing is]])))
@@ -19,6 +20,12 @@
     (is (let [{:keys [coord] :as output} (sut/normalize-coordinates {:lat-lng "-49.5, -123.5"})]
           (and (contains? output :coord)
                (nil? coord))))))
+
+(deftest has-some-non-nil-coord-test
+  (testing "Should be valid when a coord is present"
+    (is (s/valid? ::sut/has-some-non-nil-coord {:coord {:lat 49.5 :lng -123.5}})))
+  (testing "A nil coord should be invalid"
+    (is (not (s/valid? ::sut/has-some-non-nil-coord {:coord nil})))))
 
 (deftest find-marker-center-and-bounds-test
   (testing "Valid markers should return bounds."

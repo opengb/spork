@@ -36,6 +36,8 @@
                               :lat-lng (s/keys :req-un [::lat-lng])
                               :lng-lat (s/keys :req-un [::lng-lat])))
 
+; see below for ::has-some-non-nil-coord
+
 ;; ** Bounds
 (s/def ::north-east ::coord)
 (s/def ::south-west ::coord)
@@ -83,6 +85,7 @@
   [{:keys [coord]}]
   (nil? coord))
 
+(s/def ::has-some-non-nil-coord #(not (nil-coords? (normalize-coordinates %))))
 
 ;; Calculations
 
