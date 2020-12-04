@@ -55,10 +55,9 @@
   #{esri-tile-config stamen-tile-config watercolour-tile-config})
 
 (comment
- (s/explain ::leaflet-tile-config stamen-tile-config)
- (s/valid? ::base-tile-url "http://foo.bar")
- (s/valid? ::base-tile-url "http://fa://aou//foo.bar")
- (s/valid? ::leaflet-tile-config esri-tile-config)
- (s/explain ::leaflet-tile-config esri-tile-config)
- (s/generate ::leaflet-map-config)
- )
+  (s/explain ::leaflet-tile-config stamen-tile-config)
+  (s/valid? ::base-tile-url "http://foo.bar")
+  (s/valid? ::base-tile-url "http://fa://aou//foo.bar")
+  (s/valid? ::leaflet-tile-config esri-tile-config)
+  (s/explain ::leaflet-tile-config esri-tile-config)
+  (s/generate ::leaflet-map-config))

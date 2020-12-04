@@ -206,13 +206,13 @@
 
           ;; set up tile layer
           (cond
-           use-default-tiles?
-           (do (reset! *base-tile-layer (make-base-tile-layer default-tile-config))
-               (.addTo @*base-tile-layer @*leaflet-map))
+            use-default-tiles?
+            (do (reset! *base-tile-layer (make-base-tile-layer default-tile-config))
+                (.addTo @*base-tile-layer @*leaflet-map))
 
-           (s/valid? ::leaflet-specs/leaflet-tile-config tile-config)
-           (do (reset! *base-tile-layer (make-base-tile-layer tile-config))
-               (.addTo @*base-tile-layer @*leaflet-map)))
+            (s/valid? ::leaflet-specs/leaflet-tile-config tile-config)
+            (do (reset! *base-tile-layer (make-base-tile-layer tile-config))
+                (.addTo @*base-tile-layer @*leaflet-map)))
 
           (draw-markers @*leaflet-map *marker-layers markers on-marker-click)))
 

@@ -22,4 +22,10 @@ node_modules: package.json
 	npm install
 	@touch node_modules
 
+cljfmt-check:
+	clojure -R:dev -m cljfmt.main check
+
+cljfmt-fix:
+	clojure -R:dev -m cljfmt.main fix
+
 .PHONY: unit build nrepl clean

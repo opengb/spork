@@ -47,9 +47,9 @@
    (register-re-frame-handlers (keys get-rf-initializer)))
   ([component-keys]
    (let [valid-key? (set (keys get-rf-initializer))]
-   (doseq [k (filter valid-key? component-keys)
-           :let [handler (get-rf-initializer k)]]
-     (handler)))))
+     (doseq [k (filter valid-key? component-keys)
+             :let [handler (get-rf-initializer k)]]
+       (handler)))))
 
 ;; * Old vars; don't use these any more
 
