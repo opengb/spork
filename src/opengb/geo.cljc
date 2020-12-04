@@ -43,6 +43,7 @@
 (s/def ::south-west ::coord)
 (s/def ::bounds (s/keys :req-un [::north-east ::south-west]))
 
+(s/def ::center ::coord)
 (s/def ::initial-center ::coord)
 (s/def ::initial-bounds ::bounds)
 
@@ -98,14 +99,13 @@
                      :south-west {:lat 40.0 :lng -140.0}}})
 
 (defn find-marker-center-and-bounds
-  "Finds center point and bounding box of given markers. If no valid markers are
-  given, then returns defaults."
+  "Finds center point and bounding box of given markers."
   [markers]
-  {:post [(s/valid? (s/keys :req-un [::initial-center ::initial-bounds]) %)]}
+  {:post [(s/valid? (s/nilable (s/keys :req-un [::center ::bounds])) %)]}
   (let [coord-markers (->> markers
                            (map normalize-coordinates)
                            (remove nil-coords?))]
-    (if (not-empty coord-markers)
+    (when (not-empty coord-markers)
       (let [mid           (fn [nums] (+ (/ (- (apply max nums) (apply min nums)) 2) (apply min nums)))
             coords        (map :coord coord-markers)
             lats          (map :lat coords)
@@ -117,7 +117,16 @@
             bounds        {:north-east {:lat north :lng east}
                            :south-west {:lat south :lng west}}
             center        {:lat (mid lats) :lng (mid lngs)}]
-        {:initial-center center :initial-bounds bounds})
+        {:center center :bounds bounds}))))
+
+(defn find-initial-marker-center-and-bounds
+  "Finds center point and bounding box of given markers. If no valid markers are
+  given, then returns defaults suitable for a map of Canada."
+  [markers]
+  {:post [(s/valid? (s/keys :req-un [::initial-center ::initial-bounds]) %)]}
+  (let [{:keys [center bounds]} (find-marker-center-and-bounds markers)]
+    (if (and center bounds)
+      {:initial-center center :initial-bounds bounds}
       default-center-and-bounds)))
 
 (defn does-bounds-contain-coord?
