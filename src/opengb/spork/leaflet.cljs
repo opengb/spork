@@ -194,7 +194,7 @@
           (if fit-to-markers?
 
             ;; calc zoom and center
-            (let [{:keys [initial-center initial-bounds]} (geo/find-marker-center-and-bounds markers)
+            (let [{:keys [initial-center initial-bounds]} (geo/find-initial-marker-center-and-bounds markers)
                   initial-zoom (.getBoundsZoom @*leaflet-map (geo/bounds->leaflet-js initial-bounds))]
               (.setView @*leaflet-map (geo/coord->leaflet-js initial-center)
                         initial-zoom))
