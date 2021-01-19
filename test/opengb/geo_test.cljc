@@ -29,8 +29,35 @@
 
 (deftest find-marker-center-and-bounds-test
   (testing "Valid markers should return bounds."
-    (let [{:keys [initial-center initial-bounds]}
+    (let [{:keys [center bounds]}
           (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [49.2827 -123.1207]}
+                                              {:id 2 :lat-lng [49.2830 -123.1235]}])]
+      (is (= {:lat 49.282849999999996 :lng -123.1221}
+             center))
+      (is (= {:north-east {:lat 49.283 :lng -123.1207}
+              :south-west {:lat 49.2827 :lng -123.1235}}
+             bounds))))
+
+  (testing "Markers with nil lat-lngs should be filtered from the calculations."
+    (let [{:keys [center bounds]}
+          (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [49.2827 -123.1207]}
+                                              {:id 2 :lat-lng [49.2830 -123.1235]}
+                                              {:id 3 :lat-lng nil}])]
+      (is (= {:lat 49.282849999999996 :lng -123.1221}
+             center))
+      (is (= {:north-east {:lat 49.283 :lng -123.1207}
+              :south-west {:lat 49.2827 :lng -123.1235}}
+             bounds))))
+
+  (testing "Input with no valid markers should return nil"
+    (is (nil? (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [-123.1207 49.2827]}
+                                            {:id 2 :lat-lng "49.2830 -123.1235"}
+                                            {:id 3 :lat-lng nil}])))))
+
+(deftest find-initial-marker-center-and-bounds-test
+  (testing "Valid markers should return bounds."
+    (let [{:keys [initial-center initial-bounds]}
+          (sut/find-initial-marker-center-and-bounds [{:id 1 :lat-lng [49.2827 -123.1207]}
                                               {:id 2 :lat-lng [49.2830 -123.1235]}])]
       (is (= {:lat 49.282849999999996 :lng -123.1221}
              initial-center))
@@ -40,7 +67,7 @@
 
   (testing "Markers with nil lat-lngs should be filtered from the calculations."
     (let [{:keys [initial-center initial-bounds]}
-          (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [49.2827 -123.1207]}
+          (sut/find-initial-marker-center-and-bounds [{:id 1 :lat-lng [49.2827 -123.1207]}
                                               {:id 2 :lat-lng [49.2830 -123.1235]}
                                               {:id 3 :lat-lng nil}])]
       (is (= {:lat 49.282849999999996 :lng -123.1221}
@@ -51,7 +78,7 @@
 
   (testing "Input with no valid markers should return default center and bounds"
     (is sut/default-center-and-bounds
-        (sut/find-marker-center-and-bounds [{:id 1 :lat-lng [-123.1207 49.2827]}
+        (sut/find-initial-marker-center-and-bounds [{:id 1 :lat-lng [-123.1207 49.2827]}
                                             {:id 2 :lat-lng "49.2830 -123.1235"}
                                             {:id 3 :lat-lng nil}]))))
 
