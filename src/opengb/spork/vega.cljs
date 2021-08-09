@@ -33,11 +33,9 @@
   [*vega-view *a-ref this-component]
   (let [props (reagent/props this-component)
         vega-spec (or (:vega-spec props) {})
-        on-click (:on-click props)
         runtime (.parse js/vega vega-spec)
         view (-> (js/vega.View. runtime)
                  (.initialize @*a-ref)
-                 (.addEventListener "click" #(on-click %))
                  (.renderer "svg")
                  (.hover))]
     ;; uncomment to debug in signal expressions
@@ -46,6 +44,11 @@
     (.run view)
     ; (js/console.log "vega mount" width height)
     (reset! *vega-view view)
+
+    (when-let [on-click (:on-click props)]
+      (. view (addEventListener "click" #(on-click %))))
+    (when-let [{:keys [name handler]} (:signal-listener props)]
+      (. view (addSignalListener name handler)))
     ;; give it one initial bump, in case of static data
     (update-component *vega-view this-component)))
 
