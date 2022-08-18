@@ -35,19 +35,21 @@
 
 (defn mount-component
   [a-ref this-component]
-  (let [props     (reagent/props this-component)
-        vega-spec (clj->js (or (:vega-spec props) {}))
-        on-click  (:on-click props)
-        runtime   (.parse js/vega vega-spec)
-        view      (-> (js/vega.View. runtime)
-                      (.initialize a-ref)
-                      (.addEventListener "click" #(on-click %))
-                      (.renderer "svg")
-                      (.hover))]
+  (let [props          (reagent/props this-component)
+        vega-spec      (clj->js (or (:vega-spec props) {}))
+        runtime        (.parse js/vega vega-spec)
+        view           (-> (js/vega.View. runtime)
+                           (.initialize a-ref)
+                           (.renderer "svg")
+                           (.hover))
+        on-click       (:on-click props)
+        clickable-view (if (ifn? on-click)
+                         (.addEventListener view "click" #(on-click %))
+                         view)]
     ;; uncomment to debug in signal expressions
     ;; see https://vega.github.io/vega/docs/expressions/#debug
     ; (.logLevel view js/vega.Warn)
-    (.run view)
+    (.run clickable-view)
     view))
 
 (defn VegaRenderer
