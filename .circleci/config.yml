@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/clojure:tools-deps-node-browsers
+      - image: cimg/clojure:1.11.1-openjdk-17.0-browsers
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
