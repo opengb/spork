@@ -133,12 +133,12 @@
   "Takes in a bounds and a coord and returns true if coord is inside bounds"
   [{:keys [north-east south-west] :as bounds}
    {:keys [lat lng] :as coord}]
-  {:pre [(s/valid? ::coord coord)
-         (s/valid? ::bounds bounds)]}
-  (and (< lat (:lat north-east))
-       (> lat (:lat south-west))
-       (< lng (:lng north-east))
-       (> lng (:lng south-west))))
+  (when (and (s/valid? ::coord coord)
+             (s/valid? ::bounds bounds))
+    (and (< lat (:lat north-east))
+         (> lat (:lat south-west))
+         (< lng (:lng north-east))
+         (> lng (:lng south-west)))))
 
 
 ;; * Leaflet Specs and Conversions
@@ -180,4 +180,12 @@
          [bounds]
          (-> bounds
              bounds->leaflet
-             clj->js))))
+             clj->js))
+
+       (defn leaflet-bounds->bounds
+         "Converts a leaflet bounds object to a clojure bounds map"
+         [leaflet-bounds]
+         {:north-east {:lat (.. leaflet-bounds -_northEast -lat)
+                       :lng (.. leaflet-bounds -_northEast -lng)}
+          :south-west {:lat (.. leaflet-bounds -_southWest -lat)
+                       :lng (.. leaflet-bounds -_southWest -lng)}})))
