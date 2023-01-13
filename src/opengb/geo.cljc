@@ -133,12 +133,12 @@
   "Takes in a bounds and a coord and returns true if coord is inside bounds"
   [{:keys [north-east south-west] :as bounds}
    {:keys [lat lng] :as coord}]
-  {:pre [(s/valid? ::coord coord)
-         (s/valid? ::bounds bounds)]}
-  (and (< lat (:lat north-east))
-       (> lat (:lat south-west))
-       (< lng (:lng north-east))
-       (> lng (:lng south-west))))
+  (when (and (s/valid? ::coord coord)
+             (s/valid? ::bounds bounds))
+    (and (< lat (:lat north-east))
+         (> lat (:lat south-west))
+         (< lng (:lng north-east))
+         (> lng (:lng south-west)))))
 
 
 ;; * Leaflet Specs and Conversions
