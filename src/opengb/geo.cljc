@@ -158,12 +158,12 @@
     nil))
 
 (defn bounds->leaflet
-  "Converts a bounds map to [[ne-lat ne-lng][sw-lat sw-lng]]"
+  "Converts a bounds map to [[ne-lat ne-lng][sw-lat sw-lng]].
+  Returns nil if input bounds are invalid."
   [{:keys [north-east south-west] :as bounds}]
-  {:pre  [(s/valid? ::bounds bounds)]
-   :post [(s/valid? ::leaflet-bounds %)]}
-  [[(:lat north-east) (:lng north-east)]
-   [(:lat south-west) (:lng south-west)]])
+  (when (s/valid? ::bounds bounds)
+    [[(:lat north-east) (:lng north-east)]
+     [(:lat south-west) (:lng south-west)]]))
 
 ;; ** ->JS helpers
 #?(:cljs
