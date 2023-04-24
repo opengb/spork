@@ -174,6 +174,12 @@
              coord->leaflet
              clj->js))
 
+       (defn leaflet-coord->coord
+         "Converts a leaflet coord object to a clojure coord map"
+         [leaflet-coord]
+         {:lat (.-lat leaflet-coord)
+          :lng (.-lng leaflet-coord)})
+
        (defn bounds->leaflet-js
          "Converts a bounds map to a Javascript array of
          [[ne-lat ne-lng][sw-lat sw-lng]]"
