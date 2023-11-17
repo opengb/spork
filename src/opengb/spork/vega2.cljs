@@ -7,6 +7,34 @@
   (:require
    [reagent.core :as reagent]))
 
+;; Source: https://github.com/d3/d3-time-format/blob/main/locale/en-CA.json
+(def locale:en-CA
+  {:time
+   {:dateTime "%a %b %e %X %Y",
+    :date "%Y-%m-%d",
+    :time "%H:%M:%S",
+    :periods ["AM" "PM"],
+    :days ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"],
+    :shortDays ["Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat"],
+    :months ["January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December"],
+    :shortMonths ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"]}})
+
+;; Source: https://github.com/d3/d3-time-format/blob/main/locale/fr-CA.json
+(def locale:fr-CA
+  {:time
+   {:dateTime "%a %e %b %Y %X",
+    :date "%Y-%m-%d",
+    :time "%H:%M:%S",
+    :periods ["" ""],
+    :days ["dimanche" "lundi" "mardi" "mercredi" "jeudi" "vendredi" "samedi"],
+    :shortDays ["dim" "lun" "mar" "mer" "jeu" "ven" "sam"],
+    :months ["janvier" "février" "mars" "avril" "mai" "juin" "juillet" "août" "septembre" "octobre" "novembre" "décembre"],
+    :shortMonths ["jan" "fév" "mar" "avr" "mai" "jui" "jul" "aoû" "sep" "oct" "nov" "déc"]}})
+
+(def locale-key->locale-map
+  {"en-CA" locale:en-CA
+   "fr-CA" locale:fr-CA})
+
 (defn update-component
   [^js/vega.View vega-view this-component]
   (let [props (reagent/props this-component)
@@ -37,7 +65,11 @@
   [a-ref this-component]
   (let [props          (reagent/props this-component)
         vega-spec      (clj->js (or (:vega-spec props) {}))
-        runtime        (.parse js/vega vega-spec)
+        vega-config    (->> (get props :locale "en-CA")
+                            locale-key->locale-map
+                            (hash-map :locale)
+                            clj->js)
+        runtime        (.parse js/vega vega-spec vega-config)
         view           (-> (js/vega.View. runtime)
                            (.initialize a-ref)
                            (.renderer "svg")
