@@ -224,7 +224,11 @@
               leaflet-map ^js/Leaflet.Map @*leaflet-map
               did-resize? true
               current-zoom  (.getZoom leaflet-map)
-              current-view (-> (.getBounds leaflet-map) (.getCenter))]
+              current-view (-> (.getBounds leaflet-map) (.getCenter))
+
+              ;; calc zoom and center
+              {:keys [initial-center initial-bounds]} (geo/find-initial-marker-center-and-bounds markers)
+              initial-zoom (.getBoundsZoom @*leaflet-map (geo/bounds->leaflet-js initial-bounds))]
 
           ;; swap tile layer (might have been remote)
           (when (and (not use-default-tiles?)
@@ -236,8 +240,8 @@
           ;; jic outer DOM el bounds shifted, force-reload edge tiles
           (.invalidateSize leaflet-map did-resize?)
           (.setView leaflet-map
-                    current-view
-                    current-zoom
+                    (geo/coord->leaflet-js initial-center)
+                    initial-zoom
                     ;; prevent pan animations on a resize
                     #js {:reset did-resize?})
 
