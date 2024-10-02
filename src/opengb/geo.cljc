@@ -10,7 +10,7 @@
 (s/def ::lat              (s/double-in :min -90 :max 90 :infinite false :NaN? false))
 (s/def ::lng              (s/double-in :min -180 :max 180 :infinite false :NaN? false))
 (s/def ::zoom             (s/or :double (s/double-in :min 0 :max 20 :infinite false :NaN? false)
-                                :int    (s/int-in 0 20)))
+                                :int    (s/int-in 0 21)))
 
 ;; ** Coordinate Types
 
