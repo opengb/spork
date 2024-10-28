@@ -16,7 +16,7 @@
 
 (s/def ::attribution ::localizable-string)
 (s/def ::url         ::localizable-string)
-(s/def ::subdomains  ::non-empty-string)
+(s/def ::subdomains  (s/nilable ::non-empty-string))
 (s/def ::min-zoom    ::geo/zoom)
 (s/def ::max-zoom    ::geo/zoom)
 
