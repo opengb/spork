@@ -17,7 +17,11 @@
     :days ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"],
     :shortDays ["Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat"],
     :months ["January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December"],
-    :shortMonths ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"]}})
+    :shortMonths ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"]}
+   :number
+   {:decimal "."
+    :thousands ","
+    :grouping [3]}})
 
 ;; Source: https://github.com/d3/d3-time-format/blob/main/locale/fr-CA.json
 (def locale:fr-CA
@@ -29,7 +33,11 @@
     :days ["dimanche" "lundi" "mardi" "mercredi" "jeudi" "vendredi" "samedi"],
     :shortDays ["dim" "lun" "mar" "mer" "jeu" "ven" "sam"],
     :months ["janvier" "février" "mars" "avril" "mai" "juin" "juillet" "août" "septembre" "octobre" "novembre" "décembre"],
-    :shortMonths ["jan" "fév" "mar" "avr" "mai" "jui" "jul" "aoû" "sep" "oct" "nov" "déc"]}})
+    :shortMonths ["jan" "fév" "mar" "avr" "mai" "jui" "jul" "aoû" "sep" "oct" "nov" "déc"]}
+   :number
+   {:decimal ","
+    :thousands " "
+    :grouping [3]}})
 
 (def locale-key->locale-map
   {"en-CA" locale:en-CA
