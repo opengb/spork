@@ -15,9 +15,13 @@
 (def fuzzy-currency-format (NumberFormat. Format/COMPACT_LONG))
 (def two-decimals-format (NumberFormat. "	#,##0.00"))
 
+(defn should-show-two-decimals?
+  [num]
+  (< (js/Math.abs num) 1))
+
 (defn format-as-number
   [num]
-  (.format (if (< num 1) two-decimals-format metric-format) (str num)))
+  (.format (if (should-show-two-decimals? num) two-decimals-format metric-format) (str num)))
 
 (defn Mag
   [n]
