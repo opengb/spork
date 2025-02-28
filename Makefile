@@ -28,4 +28,16 @@ cljfmt-check:
 cljfmt-fix:
 	clojure -M:dev -m cljfmt.main fix
 
+# check clj library versions
+ancient:
+	@clojure -M:outdated --no-changes --skip=pom
+
+# report on unused clj code
+carve-report:
+	clojure -M:carve --paths src dev test --report true --report-format :text
+
+# remove unused clj code
+carve:
+	clojure -M:carve --paths src dev test
+
 .PHONY: unit build nrepl clean
