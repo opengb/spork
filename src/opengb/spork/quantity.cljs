@@ -13,10 +13,11 @@
 (def compact-currency-format (NumberFormat. "¤ #,##0"))
 (def html-currency-format (NumberFormat. "#,##0"))
 (def fuzzy-currency-format (NumberFormat. Format/COMPACT_LONG))
+(def two-decimals-format (NumberFormat. "	#,##0.00"))
 
 (defn format-as-number
   [num]
-  (.format metric-format (str num)))
+  (.format (if (< num 1) two-decimals-format metric-format) (str num)))
 
 (defn Mag
   [n]
