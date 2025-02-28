@@ -16,5 +16,4 @@
 /target/
 node_modules
 out
-pom.xml
 pom.xml.asc
