@@ -8,20 +8,15 @@
 
 ; https://gist.github.com/zentrope/181d591b52dcf3f5d336bc15131a1116
 (def number-format (NumberFormat. Format/DECIMAL))
-(def metric-format (NumberFormat. "#,##0"))
+(def metric-format (.setSignificantDigits (NumberFormat. "#,##0.##") 2))
 (def currency-format (NumberFormat. Format/CURRENCY))
 (def compact-currency-format (NumberFormat. "¤ #,##0"))
 (def html-currency-format (NumberFormat. "#,##0"))
 (def fuzzy-currency-format (NumberFormat. Format/COMPACT_LONG))
-(def two-decimals-format (NumberFormat. "	#,##0.00"))
-
-(defn should-show-two-decimals?
-  [num]
-  (< (js/Math.abs num) 1))
 
 (defn format-as-number
   [num]
-  (.format (if (should-show-two-decimals? num) two-decimals-format metric-format) (str num)))
+  (.format metric-format (str num)))
 
 (defn Mag
   [n]
