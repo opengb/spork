@@ -1,13 +1,24 @@
-version: 2
+---
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.4.6
 jobs:
   build:
     docker:
-      - image: cimg/clojure:1.11.1-openjdk-17.0-browsers
+      - image: cimg/clojure:1.11-node
     working_directory: ~/repo
     environment:
+      NODE_OPTIONS: "--max-old-space-size=1024"
       LEIN_ROOT: "true"
     steps:
       - checkout
+
+      # - browser-tools/install-browser-tools
+      - browser-tools/install-firefox:
+          version: 134.0.2
+      - browser-tools/install-geckodriver:
+          version: v0.34.0  # remove once etaoin has updated to support 0.35.0
+
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "deps.edn" }}
