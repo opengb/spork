@@ -8,7 +8,7 @@
 
 ; https://gist.github.com/zentrope/181d591b52dcf3f5d336bc15131a1116
 (def number-format (NumberFormat. Format/DECIMAL))
-(def metric-format (NumberFormat. "#,##0"))
+(def metric-format (.setSignificantDigits (NumberFormat. "#,##0.##") 2))
 (def currency-format (NumberFormat. Format/CURRENCY))
 (def compact-currency-format (NumberFormat. "¤ #,##0"))
 (def html-currency-format (NumberFormat. "#,##0"))
