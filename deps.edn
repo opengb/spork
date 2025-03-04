@@ -13,7 +13,14 @@
         org.clojure/clojurescript {:mvn/version "1.10.597"}
         re-frame/re-frame {:mvn/version "0.10.9"}
         reagent/reagent {:mvn/version "0.8.1"}}
- :aliases {:test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}
+ :aliases {:outdated {;; Note that it is `:deps`, not `:extra-deps`
+                      :deps      {com.github.liquidz/antq {:mvn/version "2.3.1043"}}
+                      :main-opts ["-m" "antq.core"]}
+           :carve {:extra-deps {io.github.borkdude/carve
+                                {:git/sha "f45dc3cb35a8b9c6c11d4681f8c673fa347d54be"
+                                 :git/url "https://github.com/borkdude/carve"}}
+                   :main-opts  ["-m" "carve.main"]}
+           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}
                                lambdaisland/kaocha-cljs {:mvn/version "0.0-59"}}
                   :extra-paths ["test"]}
            :dev {:extra-deps {binaryage/devtools {:mvn/version "0.9.11"}
